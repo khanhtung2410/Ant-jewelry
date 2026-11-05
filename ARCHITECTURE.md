@@ -1,0 +1,1232 @@
+# AN JEWELRY — ARCHITECTURE
+
+> **Trạng thái tài liệu:** Bản dự thảo / kiến trúc đề xuất  
+> **Tài liệu nguồn:** `AN_JEWELRY_SAD_v1.1.docx`  
+> **Trạng thái dự án:** Chưa có codebase. Tài liệu này mô tả kiến trúc đề xuất được xây dựng dựa trên SAD, không phải mô tả một hệ thống đã được triển khai hoặc xác minh.  
+> **Ngôn ngữ:** Nội dung diễn giải bằng tiếng Việt; giữ nguyên các technical terms, tên công nghệ, tên module, tên bảng, tên API, identifier và code terms bằng tiếng Anh.
+
+---
+
+## 1. Mục đích tài liệu
+
+Tài liệu này chuyển các nội dung phân tích và thiết kế trong `AN_JEWELRY_SAD_v1.1.docx` thành bản định hướng kiến trúc kỹ thuật ban đầu cho dự án AN JEWELRY. Tài liệu được sử dụng làm cơ sở để:
+
+- Thống nhất cách nhìn tổng thể về hệ thống trước khi bắt đầu lập trình.
+- Xác định các thành phần chính, trách nhiệm của từng thành phần và cách chúng tương tác.
+- Định hướng phân chia module ở Frontend và Backend.
+- Mô tả mô hình dữ liệu logic ở mức hiện có trong SAD.
+- Định hướng API, Authentication, Authorization và lưu trữ hình ảnh.
+- Ghi nhận các quyết định kỹ thuật còn cần xác nhận để tránh tự ý biến giả định thành yêu cầu chính thức.
+- Làm cơ sở cập nhật kiến trúc khi dự án có codebase và các quyết định thiết kế được phê duyệt.
+
+### 1.1. Nguyên tắc xây dựng tài liệu
+
+Tài liệu bám theo phạm vi, thuật ngữ và trạng thái yêu cầu trong SAD v1.1. Không tự bổ sung các nghiệp vụ chưa được xác nhận.
+
+Các trạng thái được sử dụng:
+
+| Trạng thái | Ý nghĩa |
+|---|---|
+| Đã khảo sát / Đã xác định | Có cơ sở từ website được khảo sát hoặc nội dung nghiệp vụ đã được làm rõ trong SAD |
+| Cần xác nhận | Cần chủ dự án hoặc đơn vị vận hành xác nhận trước khi thiết kế chi tiết hoặc triển khai |
+| Đề xuất | Phương án kỹ thuật được đưa ra để tham khảo, chưa được xem là quyết định đã phê duyệt |
+
+### 1.2. Giới hạn của tài liệu
+
+Hiện tại dự án chưa có source code. Vì vậy, tài liệu không khẳng định:
+
+- Cấu trúc thư mục thực tế của Frontend hoặc Backend.
+- Phiên bản framework, thư viện hoặc package đang sử dụng.
+- Database schema vật lý, migrations, indexes hoặc constraints đã tồn tại.
+- Các API endpoint đã được triển khai.
+- Cấu hình Authentication, Authorization hoặc bảo mật đã hoạt động.
+- Hạ tầng Hosting, Deployment, CI/CD, Logging hoặc Monitoring thực tế.
+
+Các sơ đồ, module và cấu trúc thư mục trong tài liệu là định hướng đề xuất, trừ khi được ghi rõ là nội dung đã xác định trong SAD.
+
+---
+
+## 2. Tổng quan hệ thống
+
+### 2.1. Giới thiệu
+
+AN JEWELRY là website giới thiệu các sản phẩm trang sức. Website cung cấp thông tin để khách hàng tham khảo sản phẩm, tìm hiểu nội dung liên quan và gửi thông tin liên hệ khi có nhu cầu được tư vấn.
+
+Theo phạm vi đã được chủ dự án làm rõ trong SAD:
+
+- Khách hàng có thể xem thông tin sản phẩm.
+- Khách hàng có thể xem nội dung Blog.
+- Khách hàng có thể xem thông tin liên hệ.
+- Khách hàng có thể điền và gửi biểu mẫu liên hệ để AN JEWELRY liên hệ lại.
+
+Website **không** hỗ trợ các chức năng sau trong phạm vi hiện tại:
+
+- Shopping Cart.
+- Online Ordering.
+- Online Payment.
+- Online Transaction.
+- Custom Jewelry Design hoặc đặt thiết kế/sản xuất sản phẩm theo yêu cầu riêng.
+
+Không được tự ý đưa các chức năng nằm ngoài phạm vi trên vào kiến trúc hoặc kế hoạch triển khai nếu chưa có thay đổi yêu cầu chính thức từ chủ dự án.
+
+### 2.2. Mục tiêu hệ thống
+
+1. Cung cấp giao diện trực tuyến để giới thiệu sản phẩm trang sức.
+2. Hỗ trợ khách hàng tìm kiếm, lọc, sắp xếp và xem chi tiết sản phẩm theo các yêu cầu được xác định.
+3. Cung cấp nội dung Blog để khách hàng tham khảo.
+4. Tiếp nhận thông tin liên hệ từ khách hàng.
+5. Định hướng xây dựng khu vực quản trị để người có quyền quản lý nội dung và xử lý thông tin liên hệ.
+6. Tạo nền tảng kỹ thuật có thể bảo trì và mở rộng theo phạm vi được phê duyệt.
+
+### 2.3. Phạm vi chức năng chính
+
+| Nhóm chức năng | Nội dung | Actor chính | Trạng thái |
+|---|---|---|---|
+| Trang chủ | Hiển thị nội dung giới thiệu và điều hướng website | Customer | Nội dung tĩnh hay lấy từ API cần xác nhận |
+| Sản phẩm | Xem danh sách sản phẩm | Customer | Đã xác định |
+| Lọc sản phẩm | Lọc theo danh mục hoặc Product Type | Customer | Một phần cần xác nhận do Category chưa có mô hình dữ liệu |
+| Sắp xếp sản phẩm | Sắp xếp theo giá hoặc tên | Customer | Đã khảo sát; quy tắc mặc định cần xác nhận |
+| Chi tiết sản phẩm | Xem thông tin và hình ảnh sản phẩm | Customer | Đã xác định; trường mô tả và thông số cần xác nhận |
+| Product Type | Cung cấp danh sách loại trang sức | Customer / Admin | Có bảng logic; nhu cầu quản trị cần xác nhận |
+| Blog | Xem danh sách bài viết | Customer | Đã khảo sát |
+| Blog Detail | Xem nội dung chi tiết bài viết | Customer | Đã khảo sát; trạng thái công khai cần xác nhận |
+| Contact Information | Xem thông tin liên hệ | Customer | Nguồn dữ liệu cần xác nhận |
+| Contact Submission | Gửi biểu mẫu liên hệ | Customer | Đã xác định; trường dữ liệu và validation cần xác nhận |
+| Product Management | Quản lý sản phẩm | Admin / Staff | Quyền và thao tác cụ thể cần xác nhận |
+| Blog Management | Quản lý bài viết | Admin / Staff | Quyền và trạng thái xuất bản cần xác nhận |
+| Contact Management | Xem và xử lý yêu cầu liên hệ | Admin / Staff | Quy trình xử lý cần xác nhận |
+| User Management | Quản lý người dùng và quyền | Admin | Cấu trúc User/Role cần xác nhận |
+| Reporting | Thống kê, báo cáo | Admin | Chỉ triển khai nếu được xác nhận trong phạm vi |
+
+---
+
+## 3. Actor và vai trò
+
+### 3.1. Customer
+
+Customer là người truy cập website để tìm hiểu thông tin sản phẩm và gửi yêu cầu liên hệ.
+
+Các chức năng đã xác định:
+
+- Xem danh sách sản phẩm.
+- Xem sản phẩm theo danh mục.
+- Sắp xếp sản phẩm theo giá hoặc tên.
+- Xem thông tin chi tiết sản phẩm.
+- Xem danh sách Blog.
+- Xem chi tiết Blog.
+- Xem thông tin liên hệ.
+- Điền và gửi biểu mẫu liên hệ.
+
+Customer không tạo đơn hàng và không thực hiện thanh toán trên website.
+
+Các trường dữ liệu cụ thể của biểu mẫu, ví dụ họ tên, số điện thoại, email và nội dung yêu cầu, cần được xác nhận theo SAD.
+
+### 3.2. Admin
+
+Admin là người quản lý và kiểm soát hoạt động của hệ thống.
+
+Các nghiệp vụ dự kiến:
+
+- Quản lý sản phẩm.
+- Quản lý danh mục.
+- Quản lý bài viết Blog.
+- Xem và xử lý thông tin khách hàng gửi từ biểu mẫu liên hệ nếu được phân quyền.
+- Quản lý người dùng.
+- Xem báo cáo quản trị phù hợp với dữ liệu website nếu chức năng báo cáo nằm trong phạm vi dự án.
+
+Vai trò Admin đã được xác định ở mức Actor, nhưng quyền hạn cụ thể vẫn cần xác nhận, bao gồm:
+
+- Quyền quản lý Staff.
+- Quyền tạo và quản lý Role.
+- Quyền phân quyền.
+- Quyền cấu hình hệ thống.
+- Quyền xem và xử lý Contact Submission.
+- Quyền truy cập Reporting.
+
+### 3.3. Staff
+
+Staff là người tham gia vận hành và hỗ trợ hoạt động của website.
+
+Các nghiệp vụ dự kiến:
+
+- Hỗ trợ khách hàng.
+- Kiểm tra thông tin sản phẩm.
+- Tiếp nhận và phản hồi yêu cầu liên hệ.
+- Cập nhật thông tin sản phẩm hoặc bài viết theo quyền được cấp.
+- Cập nhật trạng thái xử lý yêu cầu liên hệ nếu nghiệp vụ này được xác nhận.
+
+Quyền cụ thể của Staff và mối quan hệ giữa Staff với User/Role chưa được xác định đầy đủ trong SAD.
+
+---
+
+## 4. Định hướng công nghệ
+
+### 4.1. Technology Stack đề xuất
+
+SAD v1.1 nêu định hướng sử dụng Next.js. Các công nghệ dưới đây là phương án đề xuất, không phải thông tin xác nhận về một hệ thống đang vận hành.
+
+| Thành phần | Công nghệ đề xuất | Vai trò | Trạng thái |
+|---|---|---|---|
+| Frontend | Next.js | Xây dựng giao diện website | Định hướng theo yêu cầu dự án |
+| Backend | Node.js / NestJS | Xử lý nghiệp vụ và cung cấp API | Đề xuất |
+| Database | PostgreSQL | Lưu trữ dữ liệu hệ thống | Đề xuất |
+| ORM | Prisma | Truy vấn và quản lý dữ liệu | Đề xuất |
+| Authentication | JWT | Xác thực người dùng nội bộ | Đề xuất |
+| Image Storage | Cloudinary | Lưu trữ hình ảnh sản phẩm và Blog | Đề xuất |
+| Version Control | Git / GitHub | Quản lý mã nguồn và cộng tác | Đề xuất |
+
+Cần đánh giá và chốt Backend, Database, Image Storage và phương thức Authentication trước khi thiết kế kỹ thuật chi tiết.
+
+### 4.2. Vai trò của từng công nghệ
+
+**Next.js**
+
+- Xây dựng các trang public của website.
+- Hiển thị danh sách và chi tiết sản phẩm.
+- Hiển thị Blog và nội dung liên hệ.
+- Xây dựng biểu mẫu Contact Submission.
+- Có thể xây dựng khu vực Admin/Staff nếu lựa chọn dùng chung một Next.js application.
+
+**Node.js / NestJS**
+
+- Cung cấp REST API cho Frontend.
+- Tiếp nhận và kiểm tra request.
+- Thực thi nghiệp vụ của từng module.
+- Kiểm tra Authentication và Authorization đối với API nội bộ.
+- Giao tiếp với Database thông qua Prisma.
+- Tích hợp dịch vụ lưu trữ hình ảnh nếu Cloudinary được lựa chọn.
+
+**PostgreSQL**
+
+- Lưu trữ dữ liệu sản phẩm.
+- Lưu trữ Product Type.
+- Lưu trữ thông tin hình ảnh và giá sản phẩm.
+- Lưu trữ Blog.
+- Lưu trữ Contact Submission.
+- Lưu trữ dữ liệu User/Role sau khi mô hình được xác nhận.
+
+**Prisma**
+
+- Định nghĩa data model ở tầng ORM.
+- Truy vấn dữ liệu từ PostgreSQL.
+- Quản lý database migrations sau khi schema được phê duyệt.
+- Hỗ trợ thao tác dữ liệu trong các Backend module.
+
+**JWT**
+
+- Là phương án xác thực người dùng nội bộ được đề xuất.
+- Không thay thế việc kiểm tra quyền truy cập ở Backend.
+- Cần xác định thêm token expiration, refresh token, logout và thu hồi token trước khi triển khai.
+
+**Cloudinary**
+
+- Là phương án lưu trữ và phân phối image assets.
+- Backend quản lý nghiệp vụ liên kết hình ảnh với Product hoặc Blog.
+- Database lưu metadata hoặc reference của asset sau khi cấu trúc dữ liệu được xác nhận.
+
+**Git / GitHub**
+
+- Quản lý source code.
+- Theo dõi lịch sử thay đổi.
+- Hỗ trợ làm việc nhóm và review code.
+- Có thể được sử dụng để quản lý tài liệu kỹ thuật và quy trình phát triển.
+
+---
+
+## 5. Tổng quan kiến trúc hệ thống
+
+### 5.1. Kiến trúc đề xuất
+
+Dựa trên Technology Direction trong SAD, hệ thống có thể được tổ chức theo các lớp:
+
+1. **Presentation Layer:** Next.js.
+2. **Application Layer:** NestJS REST API.
+3. **Domain / Module Layer:** các module nghiệp vụ.
+4. **Data Access Layer:** Prisma.
+5. **Data Layer:** PostgreSQL.
+6. **External Service:** Cloudinary cho hình ảnh nếu được lựa chọn.
+
+Sơ đồ dưới đây là kiến trúc logic đề xuất:
+
+```mermaid
+flowchart TB
+    Browser[Customer / Admin / Staff Browser]
+
+    subgraph FE[Presentation Layer]
+        Next[Next.js Application]
+        PublicUI[Public Website]
+        AdminUI[Admin / Staff Interface]
+        Next --> PublicUI
+        Next --> AdminUI
+    end
+
+    subgraph APP[Application Layer]
+        API[NestJS REST API]
+        Auth[Authentication / Authorization]
+        Product[Product Module]
+        ProductType[Product Type Module]
+        ProductImage[Product Image Module]
+        ProductPrice[Product Price Module]
+        Category[Category Module - pending confirmation]
+        Blog[Blog Module]
+        Contact[Contact Submission Module]
+        User[User / Role Module - pending confirmation]
+        Report[Reporting Module - if approved]
+
+        API --> Auth
+        API --> Product
+        API --> ProductType
+        API --> ProductImage
+        API --> ProductPrice
+        API --> Category
+        API --> Blog
+        API --> Contact
+        API --> User
+        API --> Report
+    end
+
+    subgraph DATA[Data and External Services]
+        Prisma[Prisma ORM]
+        DB[(PostgreSQL)]
+        Cloudinary[Cloudinary]
+    end
+
+    Browser --> Next
+    PublicUI -->|Public API Request| API
+    AdminUI -->|Protected API Request| API
+
+    Product --> Prisma
+    ProductType --> Prisma
+    ProductImage --> Prisma
+    ProductPrice --> Prisma
+    Category --> Prisma
+    Blog --> Prisma
+    Contact --> Prisma
+    User --> Prisma
+    Report --> Prisma
+
+    Prisma --> DB
+    ProductImage -->|Asset operations| Cloudinary
+    Blog -->|Asset operations, if applicable| Cloudinary
+```
+
+### 5.2. Presentation Layer
+
+Presentation Layer chịu trách nhiệm giao tiếp với người dùng thông qua giao diện Next.js.
+
+Có thể chia giao diện thành hai khu vực:
+
+Public Website
+- Home Page.
+- Product Listing.
+- Product Detail.
+- Blog Listing.
+- Blog Detail.
+- Contact Information.
+- Contact Form.
+
+Admin / Staff Interface
+- Product Management.
+- Product Image Management.
+- Product Price Management.
+- Product Type / Category Management nếu được xác nhận.
+- Blog Management.
+- Contact Submission Management.
+- User / Role Management theo quyền được cấp.
+- Reporting nếu nằm trong phạm vi.
+
+SAD chưa xác định Home Page và Contact Information là nội dung tĩnh trên Frontend hay lấy từ API. Cần xác nhận trước khi quyết định cách tổ chức data fetching.
+
+### 5.3. Application Layer
+
+Application Layer dự kiến sử dụng NestJS để cung cấp REST API.
+
+Trách nhiệm chính:
+- Tiếp nhận HTTP request từ Frontend.
+- Kiểm tra dữ liệu đầu vào.
+- Xác thực người dùng đối với chức năng nội bộ.
+- Kiểm tra quyền thực hiện thao tác.
+- Gọi module nghiệp vụ tương ứng.
+- Truy cập dữ liệu thông qua Prisma.
+- Trả về response dạng JSON.
+
+### 5.4. Domain / Module Layer
+
+Backend được định hướng chia thành các module theo nghiệp vụ. Chi tiết được trình bày tại mục 6.
+
+### 5.5. Data Access Layer
+
+Prisma được đề xuất làm ORM để giao tiếp với PostgreSQL.
+
+Trách nhiệm dự kiến:
+- Ánh xạ data model.
+- Thực hiện truy vấn.
+- Thực hiện thao tác tạo, cập nhật và xóa dữ liệu theo nghiệp vụ.
+- Quản lý migrations sau khi Database Schema được phê duyệt.
+
+### 5.6. Data Layer
+
+PostgreSQL là Database được đề xuất trong SAD. Các bảng logic hiện có chưa đủ điều kiện để coi là Database Schema vật lý cuối cùng.
+
+Không tạo migrations production dựa trên các quan hệ còn đang được đánh dấu Cần xác nhận.
+
+## 6. Backend Module Architecture
+Các module dưới đây là ranh giới nghiệp vụ đề xuất. Chúng chưa phải danh sách thư mục hoặc class đã tồn tại trong source code.
+### 6.1. Product Module
+Mục đích: Quản lý và cung cấp dữ liệu sản phẩm.
+
+Các trách nhiệm dự kiến:
+- Lấy danh sách sản phẩm công khai.
+- Lấy chi tiết sản phẩm.
+- Lọc và sắp xếp sản phẩm theo các tiêu chí được xác nhận.
+- Tạo sản phẩm.
+- Cập nhật thông tin sản phẩm.
+- Xóa hoặc đánh dấu xóa sản phẩm theo quy tắc nghiệp vụ.
+- Kiểm tra trạng thái hiển thị sản phẩm.
+Data entity chính: product_detail.
+
+Các điểm cần xác nhận:
+- Category và quan hệ với Product.
+- Trường mô tả đầy đủ.
+- Cấu trúc thông số sản phẩm.
+- Slug và URL routing.
+- Quy tắc giá hiện tại.
+- Quy tắc xóa mềm và hiển thị sản phẩm.
+### 6.2. Product Type Module
+Mục đích: Cung cấp và quản lý loại trang sức.
+
+Ví dụ Product Type theo SAD:
+- Ring.
+- Necklace.
+Data entity: product_type.
+
+SAD có đề cập trường is_delete. Tuy nhiên, chức năng quản trị Product Type và yêu cầu tương ứng chưa được xác định đầy đủ.
+### 6.3. Product Image Module
+Mục đích: Quản lý các hình ảnh liên kết với sản phẩm.
+
+Data entity: product_images.
+
+SAD cho biết một sản phẩm có thể có nhiều hình ảnh và có trường front_image để nhận diện hình đại diện.
+
+Các điểm cần xác nhận:
+- Trường lưu URL hoặc file reference.
+- Thứ tự hiển thị hình ảnh.
+- Quy tắc chọn ảnh đại diện.
+- Quy trình upload, thay thế và xóa ảnh.
+- Các metadata cần lưu trong Database.
+- Cách tích hợp Cloudinary nếu được lựa chọn.
+### 6.4. Product Price Module
+Mục đích: Quản lý thông tin giá sản phẩm.
+
+Data entity: product_price.
+
+SAD ghi nhận trường changed_date, có thể gợi ý việc lưu lịch sử thay đổi giá. Tuy nhiên, mô hình price history chưa được xác nhận.
+
+Các điểm cần xác nhận:
+- Trường số tiền.
+- Kiểu dữ liệu và độ chính xác.
+- Mã tiền tệ.
+- Quy tắc xác định giá hiện tại.
+- Quan hệ giữa product_detail.price_id và product_price.product_id.
+- Có cần lưu lịch sử giá hay chỉ lưu giá hiện tại.
+
+### 6.5. Category Module
+Mục đích: Quản lý danh mục kinh doanh nếu chức năng này được xác nhận.
+
+SAD phân biệt:
+- Product Type: loại hình trang sức, ví dụ Ring, Necklace.
+- Product Category: nhóm kinh doanh, ví dụ Wedding Bands, Engagement, Everyday.
+Hai khái niệm này không nên gộp làm một nếu nghiệp vụ thực tế cần quản lý độc lập.
+
+Tuy nhiên, Category entity và quan hệ giữa Category với Product chưa có trong cấu trúc dữ liệu được rà soát. Do đó, Category Module chỉ là module dự kiến, chưa phải thành phần đã được chốt.
+### 6.6. Blog Module
+Mục đích: Cung cấp nội dung Blog công khai và hỗ trợ quản trị bài viết.
+
+Data entity: blog.
+
+Các trách nhiệm dự kiến:
+- Lấy danh sách bài viết công khai.
+- Lấy chi tiết bài viết.
+- Tạo bài viết.
+- Cập nhật bài viết.
+- Xóa hoặc ẩn bài viết theo quy tắc được duyệt.
+- Quản lý trạng thái công khai nếu có.
+Các điểm cần xác nhận:
+- Trường dữ liệu nội dung chi tiết.
+- Trạng thái bài viết được xem là công khai.
+- Slug của bài viết.
+- Blog có một ảnh hay nhiều ảnh.
+- Quy tắc hiển thị bài viết đã xóa hoặc chưa xuất bản.
+### 6.7. Contact Submission Module
+Mục đích: Tiếp nhận và quản lý thông tin liên hệ từ khách hàng.
+
+Data entity: contact_submission.
+
+Các trách nhiệm dự kiến:
+- Tiếp nhận biểu mẫu từ Customer.
+- Validate dữ liệu đầu vào theo quy tắc được xác nhận.
+- Lưu thông tin liên hệ.
+- Cho phép người có quyền xem thông tin gửi đến.
+- Hỗ trợ cập nhật trạng thái xử lý nếu workflow được phê duyệt.
+Các điểm cần xác nhận:
+- Các trường bắt buộc.
+- Độ dài và định dạng của Phone, Email, Message.
+- Có chấp nhận mã quốc gia trong Phone hay không.
+- Danh sách trạng thái.
+- Quy tắc chuyển trạng thái.
+- Cách tiếp nhận và phản hồi yêu cầu.
+- Chống spam.
+- Chính sách lưu giữ và bảo vệ dữ liệu cá nhân.
+### 6.8. Authentication / User / Role Module
+Mục đích: Xác thực người dùng nội bộ và quản lý quyền truy cập.
+
+SAD đề xuất JWT cho Authentication nhưng cấu trúc User/Role và quan hệ với staff chưa được xác định.
+
+Các trách nhiệm dự kiến:
+- Đăng nhập tài khoản nội bộ.
+- Xác thực request.
+- Quản lý tài khoản.
+- Quản lý Role và Permission sau khi mô hình được phê duyệt.
+- Kiểm tra quyền truy cập chức năng quản trị.
+Không được coi JWT là toàn bộ giải pháp bảo mật. Backend vẫn phải kiểm tra quyền trên từng API hoặc nhóm thao tác được bảo vệ.
+### 6.9. Reporting Module
+Mục đích: Cung cấp số liệu tổng hợp và báo cáo quản trị nếu chức năng Reporting được xác nhận nằm trong phạm vi.
+
+SAD đề cập Reporting nhưng cũng ghi nhận cần xác nhận phạm vi và yêu cầu cụ thể.
+
+Không nên triển khai module này như một yêu cầu bắt buộc trước khi chủ dự án xác nhận:
+- Chỉ số cần thống kê.
+- Khoảng thời gian thống kê.
+- Actor được xem báo cáo.
+- Nguồn dữ liệu.
+- Cách tính từng chỉ số.
+
+## 7. System Request Flow
+
+### 7.1. Luồng xem danh sách sản phẩm
+
+```mermaid
+sequenceDiagram
+    actor Customer
+    participant FE as Next.js
+    participant API as NestJS REST API
+    participant Product as Product Module
+    participant DB as PostgreSQL
+
+    Customer->>FE: Mở trang Product Listing
+    FE->>API: GET /api/products
+    API->>Product: Gửi query parameters
+    Product->>Product: Validate filter, sort, pagination
+    Product->>DB: Query Product data
+    DB-->>Product: Product records
+    Product-->>API: Product list result
+    API-->>FE: JSON response
+    FE-->>Customer: Hiển thị danh sách sản phẩm
+```
+
+Các query parameters, pagination, sort mặc định và cách xác định giá cần được xác nhận trước khi hoàn thiện API contract.
+
+### 7.2. Luồng xem chi tiết sản phẩm
+
+```mermaid
+sequenceDiagram
+    actor Customer
+    participant FE as Next.js
+    participant API as NestJS REST API
+    participant Product as Product Module
+    participant DB as PostgreSQL
+
+    Customer->>FE: Chọn một sản phẩm
+    FE->>API: GET /api/products/{product_id}
+    API->>Product: Yêu cầu chi tiết sản phẩm
+    Product->>DB: Query Product, Product Type, Images, Price
+    DB-->>Product: Product detail data
+    Product-->>API: Detail result
+    API-->>FE: JSON response
+    FE-->>Customer: Hiển thị Product Detail
+```
+
+SAD đề xuất product_id dạng UUID. Cách tra cứu bằng slug trên URL vẫn cần xác nhận.
+
+### 7.3. Luồng gửi Contact Submission
+
+```mermaid
+sequenceDiagram
+    actor Customer
+    participant FE as Next.js
+    participant API as NestJS REST API
+    participant Contact as Contact Submission Module
+    participant DB as PostgreSQL
+
+    Customer->>FE: Nhập thông tin liên hệ
+    FE->>FE: Kiểm tra dữ liệu phía giao diện
+    FE->>API: POST /api/contact-submissions
+    API->>Contact: Validate submission
+    Contact->>DB: Lưu Contact Submission
+    DB-->>Contact: Kết quả lưu dữ liệu
+    Contact-->>API: Submission result
+    API-->>FE: Success hoặc validation error
+    FE-->>Customer: Hiển thị kết quả gửi biểu mẫu
+```
+
+Validation phía Frontend chỉ hỗ trợ trải nghiệm người dùng. Backend vẫn phải tự kiểm tra dữ liệu trước khi lưu.
+
+SAD chưa chốt các trường biểu mẫu, ràng buộc kỹ thuật, anti-spam và chính sách lưu trữ dữ liệu cá nhân. Không tự đặt các giới hạn này thành yêu cầu chính thức.
+### 7.4. Luồng quản trị nội bộ
+Luồng tổng quát dự kiến:
+1. Admin hoặc Staff truy cập khu vực quản trị.
+2. Người dùng gửi thông tin đăng nhập.
+3. Backend xác thực tài khoản.
+4. Backend kiểm tra Role/Permission.
+5. Người dùng gọi chức năng theo quyền được cấp.
+6. Backend chuyển request đến module nghiệp vụ tương ứng.
+7. Module thực hiện thao tác dữ liệu thông qua Prisma.
+8. Backend trả response cho Frontend.
+JWT là phương án được đề xuất trong SAD. Token lifecycle, refresh token, logout, thu hồi token và chính sách bảo mật tài khoản cần được xác định trước khi triển khai.
+
+## 8. Logical Data Architecture
+### 8.1. Các entity được xác định trong SAD
+SAD Appendix A và Section 6 đề cập các bảng logic sau:
+
+| Entity / Table | Vai trò theo SAD | Trạng thái / Ghi chú |
+|---|---|---|
+| product_detail | Lưu thông tin sản phẩm như tên, nhãn hiệu, loại và giới thiệu ngắn | Có cấu trúc logic; một số trường chi tiết còn thiếu |
+| product_type | Lưu loại trang sức như Ring, Necklace | Có cấu trúc logic; chức năng quản trị cần xác nhận |
+| product_images | Lưu các hình ảnh thuộc sản phẩm; có front_image | Chưa có đầy đủ URL/path và thứ tự hiển thị |
+| product_price | Lưu thông tin giá sản phẩm | Quan hệ, trường tiền và quy tắc giá hiện tại cần xác nhận |
+| contact_submission | Lưu thông tin khách hàng gửi từ biểu mẫu liên hệ | Trường dữ liệu, status và workflow cần xác nhận |
+| blog | Lưu bài viết Blog | Trường nội dung, trạng thái công khai và image model cần xác nhận |
+| staff | Lưu thông tin nhân viên | Quan hệ với User/Role chưa xác định |
+
+### 8.2. Các quan hệ logic đã được rà soát
+SAD Section 6 và Appendix A ghi nhận các quan hệ sau:
+
+| Quan hệ | Khóa / Reference | Trạng thái |
+|---|---|---|
+| product_type 1 – N product_detail | product_detail.type_id → product_type.type_id | Theo cấu trúc rà soát |
+| product_detail 1 – N product_images | product_images.product_id → product_detail.product_id | Theo cấu trúc rà soát |
+| product_detail 1 – N product_price | product_price.product_id → product_detail.product_id | Cần xác nhận OI-008 |
+| product_price và product_detail | product_detail.price_id → product_price.price_id | Cần xác nhận; có nguy cơ tạo vòng tham chiếu OI-015 |
+
+Các bảng contact_submission, blog, staff chưa có quan hệ khóa ngoại được xác định trong cấu trúc rà soát hiện tại.
+
+Các thực thể/quan hệ chưa xác định:
+- Category và quan hệ với Product (OI-009).
+- User/Role và quan hệ với Staff (OI-021).
+- Chức năng quản trị Product Type dù bảng product_type có cờ is_delete.
+### 8.3. ERD logic
+Sơ đồ dưới đây chỉ mô tả các entity và quan hệ được ghi nhận trong SAD. Quan hệ nét đứt là quan hệ còn cần xác nhận. Đây không phải Database Schema vật lý đã được phê duyệt.
+
+```mermaid
+erDiagram
+    PRODUCT_TYPE ||--o{ PRODUCT_DETAIL : "type_id - identified FK"
+    PRODUCT_DETAIL ||--o{ PRODUCT_IMAGES : "product_id - identified FK"
+    PRODUCT_DETAIL ||..o{ PRODUCT_PRICE : "product_id - OI-008"
+    PRODUCT_PRICE }o..o| PRODUCT_DETAIL : "price_id - OI-015"
+
+    PRODUCT_TYPE {
+        UUID type_id PK
+        string name
+        boolean is_delete
+    }
+
+    PRODUCT_DETAIL {
+        UUID product_id PK
+        UUID type_id FK
+        UUID price_id "FK - needs confirmation"
+        string name
+        string brand
+        string short_description
+    }
+
+    PRODUCT_IMAGES {
+        UUID image_id PK
+        UUID product_id FK
+        boolean front_image
+        string alt_name
+        string url "not finalized"
+    }
+
+    PRODUCT_PRICE {
+        UUID price_id PK
+        UUID product_id "relationship needs confirmation"
+        decimal amount "not finalized"
+        string currency "not finalized"
+        date changed_date
+    }
+
+    CONTACT_SUBMISSION {
+        UUID submission_id PK
+        string fields "to be confirmed"
+        string status "values to be confirmed"
+    }
+
+    BLOG {
+        UUID blog_id PK
+        string article_fields "to be confirmed"
+        string publication_state "to be confirmed"
+    }
+
+    STAFF {
+        string staff_fields "refer to SAD Appendix A"
+        string user_relation "unresolved"
+    }
+```
+
+Lưu ý: Các thuộc tính amount, currency, url trong sơ đồ chỉ là nhãn mô tả phần dữ liệu còn thiếu, không phải tên cột hoặc kiểu dữ liệu đã được SAD phê duyệt.
+
+### 8.4. Product Type và Product Category
+Hai khái niệm cần được giữ riêng biệt trong phân tích nghiệp vụ:
+
+| Khái niệm | Ý nghĩa | Ví dụ |
+|---|---|---|
+| Product Type | Loại hình trang sức | Ring, Necklace |
+| Product Category | Danh mục kinh doanh | Wedding Bands, Engagement, Everyday |
+
+Một sản phẩm có thể có Product Type là Ring nhưng thuộc Product Category là Wedding Bands.
+
+SAD nêu rõ không nên gộp hai khái niệm này thành một trường dữ liệu nếu nghiệp vụ thực tế cần quản lý độc lập. Tuy nhiên, Category entity và quan hệ với Product chưa được xác định trong mô hình hiện tại.
+8.5. Các vấn đề Database cần giải quyết
+Price relationship
+
+Cấu trúc hiện tại có product_price.product_id tham chiếu product_detail.product_id, đồng thời product_detail.price_id được mô tả là FK đến product_price.price_id. Điều này có thể tạo vòng tham chiếu.
+
+Cần xác nhận hướng quan hệ chuẩn và xác định có thực sự cần price_id trong product_detail hay không.
+
+Price history
+
+Trường changed_date gợi ý khả năng lưu lịch sử thay đổi giá, nhưng SAD chưa chốt mô hình này. Cần xác định:
+- Một Product có nhiều Price records hay chỉ một giá hiện tại.
+- Quy tắc chọn giá hiện tại.
+- Có cần truy vấn giá tại một thời điểm trong quá khứ hay không.
+Money representation
+
+Cần xác nhận trường số tiền, kiểu dữ liệu, precision, scale và currency. Không sử dụng một trường có tên currency để lưu số tiền nếu ý nghĩa nghiệp vụ chưa được xác định.
+
+Product image
+
+Cần xác nhận URL/path, Cloudinary reference, thứ tự hiển thị và quy tắc ảnh đại diện.
+
+Contact Submission
+
+Cần xác nhận các trường, độ dài, trạng thái và lịch sử xử lý.
+
+Blog
+
+Cần xác nhận cấu trúc nội dung, trạng thái xuất bản và Blog có một hay nhiều hình ảnh.
+
+User / Role / Staff
+
+Cần xác định User, Role, Permission và quan hệ giữa User với Staff trước khi thiết kế Authentication và Authorization.
+### 8.6. Database design readiness
+Theo SAD, Database physical design chỉ nên được thực hiện sau khi các vấn đề quan trọng được giải quyết, đặc biệt:
+- OI-008: quan hệ Product và Price.
+- OI-015: vòng tham chiếu price_id và product_id.
+- OI-016: cấu trúc số tiền và currency.
+- OI-017: Database engine và quy ước kiểu chuỗi.
+- OI-018: cấu trúc lưu trữ hình ảnh.
+Do đó, ERD trong tài liệu này chỉ là Logical Data Model để rà soát, không được dùng thay thế cho DDL hoặc Prisma Schema đã phê duyệt.
+
+## 9. API Architecture
+
+### 9.1. Nguyên tắc chung
+SAD đề xuất các quy ước API sau:
+
+| Hạng mục | Nội dung | Trạng thái |
+|---|---|---|
+| Protocol | HTTP | Đề xuất |
+| Payload | JSON mã hóa UTF-8 | Đề xuất |
+| API Style | REST | Đề xuất |
+| Public API Prefix | /api | Đề xuất |
+| Admin API Prefix | /api/admin | Đề xuất |
+| Resource Identifier | UUID cho product_id, blog_id, submission_id | Theo mô hình logic; cần đồng bộ với schema cuối |
+| API Versioning | Chưa xác định | Cần xác nhận OI-023 |
+| Pagination | page, limit được nêu trong API đề xuất | Cần xác nhận OI-023 |
+| Sorting | Các giá trị sort được đề xuất trong API | Mặc định cần xác nhận OI-023 |
+| Error Format | Chưa chốt | Cần xác nhận OI-023 |
+
+### 9.2. Public API được đề xuất
+Các endpoint sau được liệt kê trong SAD. Tất cả đều là API đề xuất, không phải endpoint đã được triển khai hoặc xác minh.
+
+| API ID | Method | Endpoint | Mục đích | Trạng thái / Phụ thuộc |
+|---|---|---|---|---|
+| API-P01 | GET | /api/products | Lấy danh sách sản phẩm | Đề xuất; category/type, price, pagination và sorting cần xác nhận |
+| API-P02 | GET | /api/products/{product_id} | Lấy chi tiết sản phẩm | Đề xuất; slug, description, specifications và image fields cần xác nhận |
+| API-P03 | GET | /api/product-types | Lấy danh sách Product Type | Đề xuất; nhu cầu sử dụng cho bộ lọc cần xác nhận |
+| API-P04 | GET | /api/categories | Lấy danh sách Category | Chưa đặc tả đầy đủ vì Category model chưa có (OI-009) |
+| API-P05 | GET | /api/blogs | Lấy danh sách Blog | Đã khảo sát; contract vẫn thuộc phần API đề xuất |
+| API-P06 | GET | /api/blogs/{blog_id} | Lấy chi tiết Blog | Đã khảo sát; publication state và slug cần xác nhận |
+| API-P07 | POST | /api/contact-submissions | Gửi biểu mẫu liên hệ | Đã xác định nghiệp vụ; field và validation cần xác nhận |
+
+### 9.3. API-P01 — Product Listing
+Method: GET
+Endpoint: /api/products
+
+Query parameters được đề xuất trong SAD:
+
+| Parameter | Vị trí | Kiểu | Bắt buộc | Mô tả | Trạng thái |
+|---|---|---|---|---|---|
+| category | query | string | Không | Lọc theo danh mục | Cần xác nhận Category ID hay slug (OI-009, OI-025) |
+| type | query | string | Không | Lọc theo Product Type (type_id) | Cần xác nhận (OI-009, OI-011) |
+| sort | query | string | Không | price_asc, price_desc, name_asc, name_desc | Giá trị mặc định cần xác nhận (OI-023) |
+| page | query | integer | Không | Trang hiện tại | Cần xác nhận (OI-023) |
+| limit | query | integer | Không | Số bản ghi mỗi trang | Cần xác nhận (OI-023) |
+
+Các trường response được SAD đề cập:
+
+| Response field | Nguồn dữ liệu dự kiến | Trạng thái |
+|---|---|---|
+| items[].product_id | product_detail.product_id | Theo mô hình logic |
+| items[].name | product_detail.name | Theo mô hình logic |
+| items[].brand | product_detail.brand | Quy tắc null cần xác nhận |
+| items[].type | product_type | Theo mô hình logic |
+| items[].price | product_price | Chưa chốt giá hiện tại và cấu trúc tiền (OI-008, OI-016) |
+| items[].thumbnail | product_images có front_image = true | URL cần xác nhận (OI-018) |
+| items[].short_description | product_detail.short_description | Theo mô hình logic |
+| pagination | Chưa xác định | Cần xác nhận (OI-023) |
+
+SAD nêu lỗi có thể gồm 400 khi tham số không hợp lệ và 500 khi xảy ra lỗi hệ thống. Error response schema chưa được chốt.
+### 9.4. API-P02 — Product Detail
+Method: GET
+Endpoint: /api/products/{product_id}
+- product_id là path parameter, kiểu string UUID theo đề xuất.
+- Tra cứu theo slug cần xác nhận (OI-011, OI-025).
+Các response fields được SAD đề cập:
+
+| Field | Nguồn | Trạng thái |
+|---|---|---|
+| product_id | product_detail | Theo mô hình logic |
+| name | product_detail | Theo mô hình logic |
+| brand | product_detail | Theo mô hình logic; quy tắc null cần xác nhận |
+| short_description | product_detail | Theo mô hình logic |
+| type | product_type | Theo mô hình logic |
+| price | product_price | Cần xác nhận (OI-008, OI-016) |
+| images[] | product_images | URL và metadata cần xác nhận (OI-018) |
+| description | Chưa có trường tương ứng đầy đủ | Cần xác nhận |
+| specifications | Chưa có cấu trúc tương ứng | Cần xác nhận (OI-010) |
+
+SAD đề cập 404 nếu sản phẩm không tồn tại hoặc đã bị xóa mềm và 500 khi có lỗi hệ thống. Nội dung response lỗi cần được thống nhất.
+### 9.5. API-P03 — Product Types
+Method: GET
+Endpoint: /api/product-types
+
+Theo đề xuất trong SAD:
+- Không có query parameter bắt buộc.
+- Response có items[] gồm type_id và name.
+- Loại trừ các bản ghi có is_delete = true.
+Việc có cần API này để phục vụ bộ lọc hay không phụ thuộc quyết định về Product Type và Category (OI-009).
+### 9.6. API-P04 — Categories
+Method: GET
+Endpoint: /api/categories
+
+SAD chưa đặc tả request/response do Category entity chưa có trong cấu trúc dữ liệu hiện tại. Không triển khai API dựa trên một schema Category tự giả định.
+### 9.7. API-P05 và API-P06 — Blog
+**API-P05**
+- Method: GET
+- Endpoint: /api/blogs
+- Mục đích: lấy danh sách bài viết Blog.
+
+**API-P06**
+- Method: GET
+- Endpoint: /api/blogs/{blog_id}
+- Mục đích: lấy chi tiết bài viết Blog.
+Các vấn đề còn mở:
+- Điều kiện để bài viết được công khai.
+- Trạng thái xuất bản.
+- Cách tra cứu bằng slug.
+- Cấu trúc hình ảnh của Blog.
+- Cấu trúc nội dung chi tiết.
+### 9.8. API-P07 — Contact Submission
+Method: POST
+Endpoint: /api/contact-submissions
+
+Mục đích: tiếp nhận biểu mẫu liên hệ từ Customer.
+
+SAD xác định nghiệp vụ gửi biểu mẫu, nhưng các trường cụ thể và validation còn cần xác nhận. Các vấn đề gồm:
+- Required fields.
+- Phone format và khả năng hỗ trợ mã quốc gia.
+- Email length/format.
+- Message length.
+- Spam protection.
+- Personal data retention.
+- Cơ chế tiếp nhận và phản hồi.
+### 9.9. Admin API
+SAD có đề xuất các nhóm Admin API cho:
+- User / Role.
+- Product.
+- Product Image.
+- Product Price.
+- Category.
+- Blog.
+- Contact Submission.
+- Contact Submission Status.
+- Reporting.
+Tuy nhiên, SAD nêu rõ request/response chi tiết của Admin API chưa được hoàn thiện. Các endpoint quản trị cần được rà soát lại theo bảng API trong SAD và các Open Issues trước khi tạo API contract chính thức.
+
+| Nhóm API | Nghiệp vụ dự kiến | Vấn đề phụ thuộc |
+|---|---|---|
+| User / Role | Quản lý người dùng và quyền | OI-004, OI-021 |
+| Product | Thêm, sửa, xóa/quản lý sản phẩm | OI-005 và Product data model |
+| Product Image | Quản lý hình ảnh sản phẩm | OI-018 |
+| Product Price | Quản lý giá sản phẩm | OI-008, OI-015, OI-016 |
+| Category | Quản lý danh mục | OI-009 |
+| Blog | Quản lý bài viết | OI-006, OI-024 |
+| Contact Submission | Xem và xử lý yêu cầu liên hệ | OI-002, OI-020 |
+| Reporting | Xem báo cáo | OI-007 |
+
+### 9.10. Hướng dẫn triển khai API
+Các nội dung sau là khuyến nghị kỹ thuật để triển khai, không phải yêu cầu nghiệp vụ mới trong SAD:
+- Tách Public API khỏi Protected Admin API.
+- Validate request tại Backend.
+- Không chỉ ẩn button trên Frontend để bảo vệ chức năng.
+- Áp dụng Authorization ở Backend.
+- Không để Frontend truy cập Database trực tiếp.
+- Không công khai trực tiếp cấu trúc Database như một API contract.
+- Thống nhất Pagination, Sorting, Filtering và Error Response trước khi phát triển các màn hình sử dụng API.
+- Viết API tests sau khi request/response schema được duyệt.
+- Duy trì sự tương thích giữa API contract, Prisma Schema và Frontend data model.
+
+## 10. Authentication và Authorization
+### 10.1. Định hướng
+SAD đề xuất JWT để xác thực người dùng nội bộ. Tuy nhiên, cấu trúc User/Role và quan hệ với Staff chưa được xác định đầy đủ.
+
+Cần phân biệt:
+- Authentication: xác định người dùng là ai.
+- Authorization: xác định người dùng được phép thực hiện thao tác nào.
+Đăng nhập thành công không đồng nghĩa người dùng có quyền thực hiện mọi thao tác quản trị.
+### 10.2. Ma trận quyền truy cập sơ bộ
+Bảng dưới đây là định hướng suy ra từ mô tả Actor trong SAD, không phải Permission Matrix đã được phê duyệt.
+
+| Chức năng | Customer | Staff | Admin |
+|---|---|---|---|
+| Xem Product và Blog công khai | Có | Có | Có |
+| Gửi Contact Submission | Có | Có | Có |
+| Quản lý Product | Không | Theo quyền được cấp | Dự kiến |
+| Quản lý Product Image / Price | Không | Theo quyền được cấp | Dự kiến |
+| Quản lý Product Type / Category | Không | Cần xác nhận | Cần xác nhận |
+| Quản lý Blog | Không | Theo quyền được cấp | Dự kiến |
+| Xem và xử lý Contact Submission | Không | Dự kiến | Dự kiến |
+| Quản lý User / Role | Không | Chưa xác định | Dự kiến |
+| Xem Reporting | Không | Chưa xác định | Cần xác nhận phạm vi |
+
+### 10.3. Các quyết định bảo mật cần xác nhận
+- Cấu trúc User entity.
+- Quan hệ giữa User và Staff.
+- Role và Permission model.
+- Một User có thể có nhiều Role hay không.
+- Password hashing.
+- Password reset.
+- JWT expiration.
+- Refresh token strategy.
+- Token revocation và logout.
+- Login rate limiting.
+- Account lockout.
+- Audit log cho thao tác quản trị.
+- Phân quyền truy cập Contact Submission và dữ liệu cá nhân.
+Không đưa ra thiết kế chi tiết cho các nội dung này như thể đã được chủ dự án phê duyệt.
+
+## 11. Image Storage Architecture
+### 11.1. Định hướng
+Cloudinary là công nghệ lưu trữ hình ảnh được đề xuất trong SAD. Việc sử dụng Cloudinary cần được xác nhận trước khi triển khai.
+
+Phân chia trách nhiệm dự kiến:
+
+| Thành phần | Trách nhiệm |
+|---|---|
+| Cloudinary | Lưu trữ và phân phối image assets nếu được chọn |
+| PostgreSQL | Lưu thông tin tham chiếu và metadata của ảnh |
+| NestJS | Kiểm tra thao tác quản lý ảnh và liên kết ảnh với Product/Blog |
+| Next.js | Hiển thị ảnh theo URL/reference được cung cấp từ Backend |
+
+### 11.2. Luồng xử lý ảnh đề xuất
+1. Admin hoặc Staff có quyền thực hiện thao tác thêm ảnh.
+2. Frontend gửi yêu cầu upload theo cơ chế được lựa chọn.
+3. Backend kiểm tra quyền và quy tắc file.
+4. Asset được lưu tại Cloudinary nếu dịch vụ này được phê duyệt.
+5. Backend lưu metadata/reference vào PostgreSQL.
+6. Public API trả thông tin ảnh cần hiển thị cho Frontend.
+Luồng cụ thể, bao gồm upload trực tiếp hay thông qua Backend, chưa được SAD quyết định.
+### 11.3. Các nội dung cần xác nhận
+- URL/path hoặc asset identifier được lưu.
+- Cloudinary public ID và các metadata cần thiết.
+- Image ordering.
+- Quy tắc chọn front_image.
+- Allowed file formats.
+- Maximum file size.
+- Image dimensions.
+- Thay thế ảnh.
+- Xóa ảnh trong Cloudinary và Database.
+- Blog hỗ trợ một ảnh hay nhiều ảnh.
+- Cách xử lý asset không còn được tham chiếu.
+
+## 12. Non-functional Architecture
+SAD đề cập các vấn đề phi chức năng nhưng chưa có dữ liệu khảo sát quy mô sản phẩm, số lượng người dùng đồng thời và lưu lượng truy cập. Vì vậy, chưa có cơ sở để đưa ra các chỉ tiêu hiệu năng định lượng chính thức.
+
+Bảng dưới đây tổng hợp các mối quan tâm kiến trúc và những việc cần làm rõ.
+
+| Mối quan tâm | Cơ sở trong SAD | Định hướng kiến trúc / Việc cần xác nhận |
+|---|---|---|
+| Responsive | Website cần hiển thị phù hợp các kích thước màn hình | Thiết kế giao diện Next.js responsive; breakpoint cụ thể thuộc UI design |
+| Performance | Chưa có số liệu về scale và traffic | Khảo sát số sản phẩm, lượng truy cập và concurrent users; xác định target trước capacity planning |
+| Security | Authentication và quyền nội bộ còn cần xác nhận | Bảo vệ Admin API tại Backend; chốt JWT, Role và Permission |
+| Data Integrity | Quan hệ Product/Price và các trường dữ liệu chưa hoàn chỉnh | Chốt PK, FK, constraints và price rules trước physical schema |
+| Availability | SAD chưa nêu SLA | Xác định yêu cầu uptime và phương án vận hành |
+| Backup / Recovery | Chưa có chính sách | Xác định lịch backup, retention và quy trình restore |
+| Observability | Chưa có quyết định | Lựa chọn Logging, Error Tracking và Monitoring khi lập kế hoạch triển khai |
+| Privacy | Contact Submission lưu thông tin khách hàng | Chốt dữ liệu thu thập, quyền truy cập và retention policy |
+| Maintainability | Định hướng module Backend và ORM | Tách module theo nghiệp vụ; duy trì API/data contracts |
+| Scalability | Chưa có số liệu tải | Đánh giá sau khi có traffic assumptions và yêu cầu hiệu năng |
+
+Không tự đặt SLA, throughput, response time, availability target hoặc Recovery Objective khi chưa có yêu cầu được xác nhận.
+
+## 13. Đề xuất cấu trúc Repository
+SAD không quy định cấu trúc thư mục source code. Cấu trúc dưới đây chỉ là gợi ý nếu dự án lựa chọn tách Next.js Frontend và NestJS Backend.
+```text
+an-jewelry/
+├── frontend/                         # Next.js application
+│   ├── app/                           # Routes and layouts
+│   ├── components/                    # Shared UI components
+│   ├── features/
+│   │   ├── products/
+│   │   ├── blog/
+│   │   ├── contact/
+│   │   └── admin/
+│   ├── lib/                           # API client and shared utilities
+│   └── public/                        # Static assets
+│
+├── backend/                          # NestJS application
+│   ├── src/
+│   │   ├── auth/
+│   │   ├── users/
+│   │   ├── products/
+│   │   ├── product-types/
+│   │   ├── product-images/
+│   │   ├── product-prices/
+│   │   ├── categories/                # Only after Category is approved
+│   │   ├── blog/
+│   │   ├── contact-submissions/
+│   │   └── reporting/                 # Only if approved
+│   └── prisma/
+│       ├── schema.prisma
+│       ├── migrations/
+│       └── seed/
+│
+├── docs/
+│   ├── SAD.md                         # Optional exported SAD
+│   └── ARCHITECTURE.md
+│
+└── README.md
+```
+
+### 13.1. Nguyên tắc tổ chức
+- frontend/ chứa Next.js application.
+- backend/ chứa NestJS application.
+- features/ ở Frontend gom UI và logic theo nghiệp vụ.
+- src/ ở Backend chứa các module nghiệp vụ.
+- prisma/ chứa Prisma Schema, migrations và seed data sau khi Database Model được phê duyệt.
+- docs/ chứa tài liệu dự án.
+Cấu trúc cuối cùng có thể thay đổi nếu dự án chọn Monorepo hoặc Shared Packages. SAD chưa đưa ra quyết định này.
+
+## 14. Environment và Deployment
+SAD chưa xác định hạ tầng triển khai. Các nội dung sau cần được lựa chọn trong giai đoạn chuẩn bị triển khai.
+### 14.1. Các thành phần cần quyết định
+- Hosting platform cho Next.js.
+- Runtime/Hosting cho NestJS.
+- Managed hoặc self-hosted PostgreSQL.
+- Cloudinary account và môi trường sử dụng.
+- Domain, DNS và HTTPS.
+- Quản lý secrets.
+- CI/CD pipeline.
+- Database migration strategy.
+- Backup và restore procedure.
+- Development, Staging và Production environments.
+### 14.2. Environment variables
+Tên biến môi trường cụ thể chưa được SAD xác định. Khi triển khai cần quản lý riêng các thông tin nhạy cảm như:
+- Database connection string.
+- JWT secret hoặc signing key.
+- Cloudinary credentials.
+- Các API keys khác nếu có.
+Không commit credentials, passwords, tokens hoặc secrets vào Git repository. Sử dụng environment variables hoặc secret manager phù hợp với hạ tầng được chọn.
+### 14.3. Deployment topology
+Chưa có cơ sở để chốt một topology cụ thể. Có thể xem xét cách triển khai Frontend, Backend và Database độc lập hoặc trên cùng một nền tảng, nhưng cần căn cứ vào yêu cầu vận hành, ngân sách, traffic và năng lực quản trị hạ tầng.
+
+Không coi bất kỳ Hosting Provider hoặc Cloud Provider cụ thể nào là quyết định của dự án khi SAD chưa nêu.
+
+## 15. Open Issues ảnh hưởng đến Architecture
+Phụ lục D của SAD là danh sách Open Issues chính thức. Bảng dưới đây tổng hợp các vấn đề quan trọng có ảnh hưởng trực tiếp đến kiến trúc, Database, API và bảo mật. Bảng này không thay thế toàn bộ nội dung Phụ lục D.
+
+| Open Issue | Nội dung cần xác nhận | Ảnh hưởng đến kiến trúc |
+|---|---|---|
+| OI-001 | Trường dữ liệu và quy tắc của Contact Form | Frontend form, API DTO, validation |
+| OI-002 | Quy trình tiếp nhận và xử lý Contact Submission | Contact Module, Admin/Staff workflow |
+| OI-004 | Phân quyền Admin/Staff | Authentication, Authorization, Admin UI |
+| OI-005 | Phạm vi và thao tác Product Management | Product Module và Admin API |
+| OI-006 | Phạm vi Blog Management và quy tắc nội dung | Blog Module, publication workflow |
+| OI-007 | Reporting có thuộc phạm vi dự án hay không | Reporting Module và acceptance criteria |
+| OI-008 | Quan hệ Product và Price, mô hình giá | Database relationship, price query |
+| OI-009 | Category entity và quan hệ với Product | Category Module, Product filters, API |
+| OI-010 | Thông số riêng của sản phẩm, ví dụ thuộc tính nhẫn/đá | Product Detail data model và UI |
+| OI-011 | URL Routing và slug | Frontend routing, API lookup |
+| OI-012 | Hiệu năng và yêu cầu định lượng | NFR, capacity planning |
+| OI-015 | Vòng tham chiếu price_id / product_id | Physical Database Design |
+| OI-016 | Số tiền, currency, kiểu dữ liệu và độ chính xác | Price model, sorting, display |
+| OI-017 | Database chính thức và quy ước kiểu chuỗi | Database schema consistency |
+| OI-018 | Image URL/path, thứ tự ảnh và cấu trúc ảnh Blog | Image Storage, Product Detail, Blog |
+| OI-019 | Validation Contact Form, anti-spam và lưu giữ dữ liệu cá nhân | API validation, Security, Privacy |
+| OI-020 | Giá trị status và quy tắc chuyển trạng thái Contact Submission | Contact workflow, Reporting |
+| OI-021 | User/Role model và quan hệ với Staff | Authentication, Authorization, User Management |
+| OI-023 | Pagination, Sorting, API versioning, timezone và Error Format | API standards |
+| OI-024 | Quy tắc xác định Blog được công khai | Blog public query và publication workflow |
+| OI-025 | Slug và định danh trên URL | Routing và API lookup |
+
+### 15.1. Các vấn đề chặn thiết kế Database
+Theo SAD, cần giải quyết các vấn đề trọng yếu trước khi hoàn thiện physical Database Design, đặc biệt OI-008, OI-015, OI-016, OI-017 và OI-018.
+### 15.2. Các vấn đề chặn thiết kế API
+- Giá chưa có trường số tiền và quy tắc giá hiện tại rõ ràng.
+- Hình ảnh chưa có đầy đủ URL/path và thứ tự hiển thị.
+- Contact Form chưa chốt field, validation và anti-spam.
+- Slug trên URL chưa được đối chiếu với cấu trúc dữ liệu.
+- Admin Permission, User/Role và Authentication chưa hoàn chỉnh.
+- Pagination, Sorting, API Versioning, timezone và Error Format chưa được chốt.
+### 15.3. Các tài liệu còn thiếu theo SAD
+SAD nêu rõ đây chưa phải bộ tài liệu thiết kế triển khai cuối cùng. Các nội dung còn thiếu hoặc chưa hoàn thiện gồm:
+- Physical Database Design.
+- Chi tiết request/response của Admin API.
+- UI Specification.
+- Test Specification.
+Các tài liệu này cần được hoàn thiện sau khi những Open Issues liên quan được xác nhận.
+
+## 16. Recommended Implementation Sequence
+Trình tự dưới đây là khuyến nghị triển khai dựa trên các phụ thuộc trong SAD, không phải tiến độ hoặc cam kết thời gian đã được phê duyệt.
+Phase 1 — Xác nhận nghiệp vụ
+- Xác nhận Contact Form và Contact Submission workflow.
+- Xác nhận quyền Admin/Staff.
+- Xác nhận Product Management.
+- Xác nhận Blog Management và publication status.
+- Xác nhận Category và Product Type.
+- Xác nhận Product Price và Image model.
+- Xác nhận Reporting có thuộc phạm vi hay không.
+Phase 2 — Hoàn thiện Data Model
+- Giải quyết quan hệ product_detail và product_price.
+- Xác định price history hoặc current price.
+- Chốt amount, currency, precision và scale.
+- Chốt Product Image metadata.
+- Bổ sung Category nếu được duyệt.
+- Xác định User/Role/Staff relationship.
+- Rà soát PK, FK, indexes và constraints.
+- Phê duyệt Physical Database Design.
+Phase 3 — Hoàn thiện API Contract
+- Chốt Public API.
+- Chốt Admin API.
+- Chốt request/response DTO.
+- Chốt validation rules.
+- Chốt Pagination và Sorting.
+- Chốt Error Response.
+- Chốt API Versioning.
+- Chốt Authentication và Authorization behavior.
+Phase 4 — Khởi tạo Project
+- Khởi tạo Next.js application.
+- Khởi tạo NestJS application.
+- Cấu hình PostgreSQL.
+- Cấu hình Prisma.
+- Cấu hình environment variables.
+- Thiết lập Git workflow.
+- Thiết lập linting, formatting và coding conventions.
+- Tạo project README và tài liệu kỹ thuật cơ bản.
+Phase 5 — Xây dựng Public Website
+- Home Page.
+- Product Listing.
+- Product Detail.
+- Product Type và Category filters theo phạm vi đã duyệt.
+- Blog Listing.
+- Blog Detail.
+- Contact Information.
+- Responsive UI.
+Phase 6 — Xây dựng Contact Intake
+- Contact Form.
+- Frontend validation.
+- Backend validation.
+- Lưu Contact Submission.
+- Spam protection.
+- Success/error feedback.
+- Chính sách bảo vệ và lưu giữ dữ liệu.
+Phase 7 — Xây dựng Internal Access
+- Authentication.
+- User Management.
+- Role / Permission.
+- Backend Authorization.
+- Admin / Staff UI.
+- Các workflow nội bộ được phê duyệt.
+Phase 8 — Xây dựng Content Management
+- Product Management.
+- Product Image Management.
+- Product Price Management.
+- Category Management nếu được duyệt.
+- Blog Management.
+- Contact Submission Management.
+Phase 9 — Reporting
+Chỉ triển khai khi Reporting được xác nhận trong phạm vi. Trước khi lập trình cần chốt chỉ số, công thức, thời gian thống kê, nguồn dữ liệu và quyền truy cập.
+Phase 10 — Testing và Release
+- Unit Tests.
+- Integration Tests.
+- API Tests.
+- Authorization Tests.
+- Frontend/UI Tests.
+- Responsive checks.
+- Security review.
+- Database backup/restore verification.
+- Deployment checklist.
+- UAT và nghiệm thu theo Test Specification.
+
+## 17. Architecture Guardrails
+Các nguyên tắc cần tuân thủ trong quá trình phát triển:
+1. Giữ phạm vi nền tảng là website giới thiệu sản phẩm trang sức và tiếp nhận Contact Submission.
+2. Không tự ý thêm Shopping Cart, Online Ordering, Online Payment, Order Management hoặc Custom Design.
+3. Xem Next.js là định hướng công nghệ theo SAD; các công nghệ Backend, Database, ORM, Authentication và Image Storage vẫn cần được chốt.
+4. Không coi các API path trong SAD là endpoint đã được triển khai.
+5. Không tạo Database migrations cuối cùng khi quan hệ và trường dữ liệu quan trọng còn chưa được xác nhận.
+6. Thực hiện Authorization ở Backend; không chỉ dựa vào việc ẩn giao diện trên Frontend.
+7. Giữ Product Type và Product Category là hai khái niệm riêng nếu nghiệp vụ cần quản lý độc lập.
+8. Phân biệt nội dung Đã xác định, Cần xác nhận và Đề xuất.
+9. Mọi thay đổi phạm vi nghiệp vụ cần được xác nhận và cập nhật vào tài liệu liên quan.
+10. Khi có source code, cập nhật tài liệu này theo implementation thực tế; không giữ các đề xuất cũ nếu kiến trúc triển khai đã được quyết định khác.
+11. Ghi lại các quyết định kiến trúc quan trọng cùng lý do và ảnh hưởng.
+12. Không đưa secrets hoặc credentials vào source control.
+
+## 18. Architecture Decision Log
+Bảng này dùng để theo dõi các quyết định cần được phê duyệt. Các trạng thái ban đầu phản ánh nội dung SAD hiện có.
+
+| Decision ID | Nội dung | Phương án hiện tại | Trạng thái |
+|---|---|---|---|
+| ADR-001 | Frontend framework | Next.js | Định hướng theo yêu cầu dự án |
+| ADR-002 | Backend framework | Node.js / NestJS | Đề xuất, cần chốt |
+| ADR-003 | Database | PostgreSQL | Đề xuất, cần chốt |
+| ADR-004 | ORM | Prisma | Đề xuất |
+| ADR-005 | Internal Authentication | JWT | Đề xuất, cần thiết kế chi tiết |
+| ADR-006 | Image Storage | Cloudinary | Đề xuất, cần chốt |
+| ADR-007 | API Style | REST-style JSON API | Đề xuất |
+| ADR-008 | Repository structure | Separate frontend/ and backend/ | Gợi ý, chưa được SAD quyết định |
+| ADR-009 | Reporting scope | Chỉ triển khai nếu được xác nhận | Cần xác nhận |
+| ADR-010 | Category model | Tách khỏi Product Type nếu nghiệp vụ cần | Cần xác nhận |
+
+Khi có quyết định chính thức, cần cập nhật phương án, trạng thái, ngày quyết định, người phê duyệt và lý do lựa chọn.
+
+## 19. Tài liệu tham chiếu
+Tài liệu nguồn chính:
+
+- AN_JEWELRY_SAD_v1.1.docx
+- Section 1 — System Survey.
+- Section 2 — Business Analysis.
+- Section 3 — System Requirements Analysis.
+- Section 4 — Use Case Model.
+- Section 5 — Activity & Sequence Models.
+- Section 6 — System Architecture and Logical Data Model.
+- Section 7 — API Specification.
+- Appendix A — Database Design Review.
+- Appendix B — Architecture Considerations.
+- Appendix C — Review Conclusion.
+- Appendix D — Open Issues.
+- Appendix E — Change Log.
+SAD v1.1 là bản dự thảo phục vụ rà soát và xác nhận nghiệp vụ. Tài liệu nêu rõ Physical Database Design, Admin API request/response chi tiết, UI Specification và Test Specification chưa hoàn thiện.
+
+Vì vậy, ARCHITECTURE.md này là kiến trúc đề xuất ở giai đoạn trước khi phát triển. Nội dung phải được cập nhật khi các Open Issues được đóng và khi source code thực tế được tạo ra.
