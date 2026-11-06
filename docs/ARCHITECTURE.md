@@ -50,14 +50,13 @@ Các sơ đồ, module và cấu trúc thư mục trong tài liệu là định 
 
 ### 2.1. Giới thiệu
 
-AN JEWELRY là website giới thiệu các sản phẩm trang sức. Website cung cấp thông tin để khách hàng tham khảo sản phẩm, tìm hiểu nội dung liên quan và gửi thông tin liên hệ khi có nhu cầu được tư vấn.
+AN JEWELRY là website giới thiệu các sản phẩm trang sức. Website cung cấp thông tin để khách hàng tham khảo sản phẩm, tìm hiểu nội dung liên quan và liên hệ trực tiếp với cửa hàng.
 
 Theo phạm vi đã được chủ dự án làm rõ trong SAD:
 
 - Khách hàng có thể xem thông tin sản phẩm.
 - Khách hàng có thể xem nội dung Blog.
-- Khách hàng có thể xem thông tin liên hệ.
-- Khách hàng có thể điền và gửi biểu mẫu liên hệ để AN JEWELRY liên hệ lại.
+- Khách hàng có thể xem số điện thoại và các liên kết Facebook, Instagram để liên hệ trực tiếp.
 
 Website **không** hỗ trợ các chức năng sau trong phạm vi hiện tại:
 
@@ -74,9 +73,8 @@ Không được tự ý đưa các chức năng nằm ngoài phạm vi trên và
 1. Cung cấp giao diện trực tuyến để giới thiệu sản phẩm trang sức.
 2. Hỗ trợ khách hàng tìm kiếm, lọc, sắp xếp và xem chi tiết sản phẩm theo các yêu cầu được xác định.
 3. Cung cấp nội dung Blog để khách hàng tham khảo.
-4. Tiếp nhận thông tin liên hệ từ khách hàng.
-5. Định hướng xây dựng khu vực quản trị để người có quyền quản lý nội dung và xử lý thông tin liên hệ.
-6. Tạo nền tảng kỹ thuật có thể bảo trì và mở rộng theo phạm vi được phê duyệt.
+4. Định hướng xây dựng khu vực quản trị để người có quyền quản lý nội dung website.
+5. Tạo nền tảng kỹ thuật có thể bảo trì và mở rộng theo phạm vi được phê duyệt.
 
 ### 2.3. Phạm vi chức năng chính
 
@@ -90,11 +88,9 @@ Không được tự ý đưa các chức năng nằm ngoài phạm vi trên và
 | Product Type | Cung cấp danh sách loại trang sức | Customer / Admin | Có bảng logic; nhu cầu quản trị cần xác nhận |
 | Blog | Xem danh sách bài viết | Customer | Đã khảo sát |
 | Blog Detail | Xem nội dung chi tiết bài viết | Customer | Đã khảo sát; trạng thái công khai cần xác nhận |
-| Contact Information | Xem thông tin liên hệ | Customer | Nguồn dữ liệu cần xác nhận |
-| Contact Submission | Gửi biểu mẫu liên hệ | Customer | Đã xác định; trường dữ liệu và validation cần xác nhận |
+| Contact Information | Xem số điện thoại và liên kết Facebook, Instagram để liên hệ trực tiếp | Customer | Giá trị chính thức cần BA xác nhận |
 | Product Management | Quản lý sản phẩm | Admin / Staff | Quyền và thao tác cụ thể cần xác nhận |
 | Blog Management | Quản lý bài viết | Admin / Staff | Quyền và trạng thái xuất bản cần xác nhận |
-| Contact Management | Xem và xử lý yêu cầu liên hệ | Admin / Staff | Quy trình xử lý cần xác nhận |
 | User Management | Quản lý người dùng và quyền | Admin | Cấu trúc User/Role cần xác nhận |
 | Reporting | Thống kê, báo cáo | Admin | Chỉ triển khai nếu được xác nhận trong phạm vi |
 
@@ -104,7 +100,7 @@ Không được tự ý đưa các chức năng nằm ngoài phạm vi trên và
 
 ### 3.1. Customer
 
-Customer là người truy cập website để tìm hiểu thông tin sản phẩm và gửi yêu cầu liên hệ.
+Customer là người truy cập website để tìm hiểu thông tin sản phẩm và liên hệ trực tiếp với cửa hàng qua các kênh được công bố.
 
 Các chức năng đã xác định:
 
@@ -114,12 +110,10 @@ Các chức năng đã xác định:
 - Xem thông tin chi tiết sản phẩm.
 - Xem danh sách Blog.
 - Xem chi tiết Blog.
-- Xem thông tin liên hệ.
-- Điền và gửi biểu mẫu liên hệ.
+- Xem số điện thoại và các liên kết Facebook, Instagram.
 
 Customer không tạo đơn hàng và không thực hiện thanh toán trên website.
 
-Các trường dữ liệu cụ thể của biểu mẫu, ví dụ họ tên, số điện thoại, email và nội dung yêu cầu, cần được xác nhận theo SAD.
 
 ### 3.2. Admin
 
@@ -130,7 +124,6 @@ Các nghiệp vụ dự kiến:
 - Quản lý sản phẩm.
 - Quản lý danh mục.
 - Quản lý bài viết Blog.
-- Xem và xử lý thông tin khách hàng gửi từ biểu mẫu liên hệ nếu được phân quyền.
 - Quản lý người dùng.
 - Xem báo cáo quản trị phù hợp với dữ liệu website nếu chức năng báo cáo nằm trong phạm vi dự án.
 
@@ -140,7 +133,6 @@ Vai trò Admin đã được xác định ở mức Actor, nhưng quyền hạn 
 - Quyền tạo và quản lý Role.
 - Quyền phân quyền.
 - Quyền cấu hình hệ thống.
-- Quyền xem và xử lý Contact Submission.
 - Quyền truy cập Reporting.
 
 ### 3.3. Staff
@@ -149,11 +141,8 @@ Staff là người tham gia vận hành và hỗ trợ hoạt động của webs
 
 Các nghiệp vụ dự kiến:
 
-- Hỗ trợ khách hàng.
 - Kiểm tra thông tin sản phẩm.
-- Tiếp nhận và phản hồi yêu cầu liên hệ.
 - Cập nhật thông tin sản phẩm hoặc bài viết theo quyền được cấp.
-- Cập nhật trạng thái xử lý yêu cầu liên hệ nếu nghiệp vụ này được xác nhận.
 
 Quyền cụ thể của Staff và mối quan hệ giữa Staff với User/Role chưa được xác định đầy đủ trong SAD.
 
@@ -183,8 +172,7 @@ Cần đánh giá và chốt Backend, Database, Image Storage và phương thứ
 
 - Xây dựng các trang public của website.
 - Hiển thị danh sách và chi tiết sản phẩm.
-- Hiển thị Blog và nội dung liên hệ.
-- Xây dựng biểu mẫu Contact Submission.
+- Hiển thị Blog, số điện thoại và các liên kết Facebook, Instagram.
 - Có thể xây dựng khu vực Admin/Staff nếu lựa chọn dùng chung một Next.js application.
 
 **Node.js / NestJS**
@@ -202,7 +190,6 @@ Cần đánh giá và chốt Backend, Database, Image Storage và phương thứ
 - Lưu trữ Product Type.
 - Lưu trữ thông tin hình ảnh và giá sản phẩm.
 - Lưu trữ Blog.
-- Lưu trữ Contact Submission.
 - Lưu trữ dữ liệu User/Role sau khi mô hình được xác nhận.
 
 **Prisma**
@@ -269,7 +256,6 @@ flowchart TB
         ProductPrice[Product Price Module]
         Category[Category Module - pending confirmation]
         Blog[Blog Module]
-        Contact[Contact Submission Module]
         User[User / Role Module - pending confirmation]
         Report[Reporting Module - if approved]
 
@@ -280,7 +266,6 @@ flowchart TB
         API --> ProductPrice
         API --> Category
         API --> Blog
-        API --> Contact
         API --> User
         API --> Report
     end
@@ -301,7 +286,6 @@ flowchart TB
     ProductPrice --> Prisma
     Category --> Prisma
     Blog --> Prisma
-    Contact --> Prisma
     User --> Prisma
     Report --> Prisma
 
@@ -322,8 +306,7 @@ Public Website
 - Product Detail.
 - Blog Listing.
 - Blog Detail.
-- Contact Information.
-- Contact Form.
+- Contact Information (phone and Facebook/Instagram links).
 
 Admin / Staff Interface
 - Product Management.
@@ -331,7 +314,6 @@ Admin / Staff Interface
 - Product Price Management.
 - Product Type / Category Management nếu được xác nhận.
 - Blog Management.
-- Contact Submission Management.
 - User / Role Management theo quyền được cấp.
 - Reporting nếu nằm trong phạm vi.
 
@@ -457,27 +439,7 @@ Các điểm cần xác nhận:
 - Slug của bài viết.
 - Blog có một ảnh hay nhiều ảnh.
 - Quy tắc hiển thị bài viết đã xóa hoặc chưa xuất bản.
-### 6.7. Contact Submission Module
-Mục đích: Tiếp nhận và quản lý thông tin liên hệ từ khách hàng.
-
-Data entity: contact_submission.
-
-Các trách nhiệm dự kiến:
-- Tiếp nhận biểu mẫu từ Customer.
-- Validate dữ liệu đầu vào theo quy tắc được xác nhận.
-- Lưu thông tin liên hệ.
-- Cho phép người có quyền xem thông tin gửi đến.
-- Hỗ trợ cập nhật trạng thái xử lý nếu workflow được phê duyệt.
-Các điểm cần xác nhận:
-- Các trường bắt buộc.
-- Độ dài và định dạng của Phone, Email, Message.
-- Có chấp nhận mã quốc gia trong Phone hay không.
-- Danh sách trạng thái.
-- Quy tắc chuyển trạng thái.
-- Cách tiếp nhận và phản hồi yêu cầu.
-- Chống spam.
-- Chính sách lưu giữ và bảo vệ dữ liệu cá nhân.
-### 6.8. Authentication / User / Role Module
+### 6.7. Authentication / User / Role Module
 Mục đích: Xác thực người dùng nội bộ và quản lý quyền truy cập.
 
 SAD đề xuất JWT cho Authentication nhưng cấu trúc User/Role và quan hệ với staff chưa được xác định.
@@ -489,7 +451,7 @@ Các trách nhiệm dự kiến:
 - Quản lý Role và Permission sau khi mô hình được phê duyệt.
 - Kiểm tra quyền truy cập chức năng quản trị.
 Không được coi JWT là toàn bộ giải pháp bảo mật. Backend vẫn phải kiểm tra quyền trên từng API hoặc nhóm thao tác được bảo vệ.
-### 6.9. Reporting Module
+### 6.8. Reporting Module
 Mục đích: Cung cấp số liệu tổng hợp và báo cáo quản trị nếu chức năng Reporting được xác nhận nằm trong phạm vi.
 
 SAD đề cập Reporting nhưng cũng ghi nhận cần xác nhận phạm vi và yêu cầu cụ thể.
@@ -548,31 +510,7 @@ sequenceDiagram
 
 SAD đề xuất product_id dạng UUID. Cách tra cứu bằng slug trên URL vẫn cần xác nhận.
 
-### 7.3. Luồng gửi Contact Submission
-
-```mermaid
-sequenceDiagram
-    actor Customer
-    participant FE as Next.js
-    participant API as NestJS REST API
-    participant Contact as Contact Submission Module
-    participant DB as PostgreSQL
-
-    Customer->>FE: Nhập thông tin liên hệ
-    FE->>FE: Kiểm tra dữ liệu phía giao diện
-    FE->>API: POST /api/contact-submissions
-    API->>Contact: Validate submission
-    Contact->>DB: Lưu Contact Submission
-    DB-->>Contact: Kết quả lưu dữ liệu
-    Contact-->>API: Submission result
-    API-->>FE: Success hoặc validation error
-    FE-->>Customer: Hiển thị kết quả gửi biểu mẫu
-```
-
-Validation phía Frontend chỉ hỗ trợ trải nghiệm người dùng. Backend vẫn phải tự kiểm tra dữ liệu trước khi lưu.
-
-SAD chưa chốt các trường biểu mẫu, ràng buộc kỹ thuật, anti-spam và chính sách lưu trữ dữ liệu cá nhân. Không tự đặt các giới hạn này thành yêu cầu chính thức.
-### 7.4. Luồng quản trị nội bộ
+### 7.3. Luồng quản trị nội bộ
 Luồng tổng quát dự kiến:
 1. Admin hoặc Staff truy cập khu vực quản trị.
 2. Người dùng gửi thông tin đăng nhập.
@@ -594,7 +532,6 @@ SAD Appendix A và Section 6 đề cập các bảng logic sau:
 | product_type | Lưu loại trang sức như Ring, Necklace | Có cấu trúc logic; chức năng quản trị cần xác nhận |
 | product_images | Lưu các hình ảnh thuộc sản phẩm; có front_image | Chưa có đầy đủ URL/path và thứ tự hiển thị |
 | product_price | Lưu thông tin giá sản phẩm | Quan hệ, trường tiền và quy tắc giá hiện tại cần xác nhận |
-| contact_submission | Lưu thông tin khách hàng gửi từ biểu mẫu liên hệ | Trường dữ liệu, status và workflow cần xác nhận |
 | blog | Lưu bài viết Blog | Trường nội dung, trạng thái công khai và image model cần xác nhận |
 | staff | Lưu thông tin nhân viên | Quan hệ với User/Role chưa xác định |
 
@@ -608,7 +545,7 @@ SAD Section 6 và Appendix A ghi nhận các quan hệ sau:
 | product_detail 1 – N product_price | product_price.product_id → product_detail.product_id | Cần xác nhận OI-008 |
 | product_price và product_detail | product_detail.price_id → product_price.price_id | Cần xác nhận; có nguy cơ tạo vòng tham chiếu OI-015 |
 
-Các bảng contact_submission, blog, staff chưa có quan hệ khóa ngoại được xác định trong cấu trúc rà soát hiện tại.
+Các bảng blog và staff chưa có quan hệ khóa ngoại được xác định trong cấu trúc rà soát hiện tại.
 
 Các thực thể/quan hệ chưa xác định:
 - Category và quan hệ với Product (OI-009).
@@ -655,12 +592,6 @@ erDiagram
         date changed_date
     }
 
-    CONTACT_SUBMISSION {
-        UUID submission_id PK
-        string fields "to be confirmed"
-        string status "values to be confirmed"
-    }
-
     BLOG {
         UUID blog_id PK
         string article_fields "to be confirmed"
@@ -686,7 +617,7 @@ Hai khái niệm cần được giữ riêng biệt trong phân tích nghiệp v
 Một sản phẩm có thể có Product Type là Ring nhưng thuộc Product Category là Wedding Bands.
 
 SAD nêu rõ không nên gộp hai khái niệm này thành một trường dữ liệu nếu nghiệp vụ thực tế cần quản lý độc lập. Tuy nhiên, Category entity và quan hệ với Product chưa được xác định trong mô hình hiện tại.
-8.5. Các vấn đề Database cần giải quyết
+### 8.5. Các vấn đề Database cần giải quyết
 Price relationship
 
 Cấu trúc hiện tại có product_price.product_id tham chiếu product_detail.product_id, đồng thời product_detail.price_id được mô tả là FK đến product_price.price_id. Điều này có thể tạo vòng tham chiếu.
@@ -706,10 +637,6 @@ Cần xác nhận trường số tiền, kiểu dữ liệu, precision, scale v�
 Product image
 
 Cần xác nhận URL/path, Cloudinary reference, thứ tự hiển thị và quy tắc ảnh đại diện.
-
-Contact Submission
-
-Cần xác nhận các trường, độ dài, trạng thái và lịch sử xử lý.
 
 Blog
 
@@ -739,7 +666,7 @@ SAD đề xuất các quy ước API sau:
 | API Style | REST | Đề xuất |
 | Public API Prefix | /api | Đề xuất |
 | Admin API Prefix | /api/admin | Đề xuất |
-| Resource Identifier | UUID cho product_id, blog_id, submission_id | Theo mô hình logic; cần đồng bộ với schema cuối |
+| Resource Identifier | UUID cho product_id và blog_id | Theo mô hình logic; cần đồng bộ với schema cuối |
 | API Versioning | Chưa xác định | Cần xác nhận OI-023 |
 | Pagination | page, limit được nêu trong API đề xuất | Cần xác nhận OI-023 |
 | Sorting | Các giá trị sort được đề xuất trong API | Mặc định cần xác nhận OI-023 |
@@ -756,7 +683,6 @@ Các endpoint sau được liệt kê trong SAD. Tất cả đều là API đề
 | API-P04 | GET | /api/categories | Lấy danh sách Category | Chưa đặc tả đầy đủ vì Category model chưa có (OI-009) |
 | API-P05 | GET | /api/blogs | Lấy danh sách Blog | Đã khảo sát; contract vẫn thuộc phần API đề xuất |
 | API-P06 | GET | /api/blogs/{blog_id} | Lấy chi tiết Blog | Đã khảo sát; publication state và slug cần xác nhận |
-| API-P07 | POST | /api/contact-submissions | Gửi biểu mẫu liên hệ | Đã xác định nghiệp vụ; field và validation cần xác nhận |
 
 ### 9.3. API-P01 — Product Listing
 Method: GET
@@ -836,21 +762,7 @@ Các vấn đề còn mở:
 - Cách tra cứu bằng slug.
 - Cấu trúc hình ảnh của Blog.
 - Cấu trúc nội dung chi tiết.
-### 9.8. API-P07 — Contact Submission
-Method: POST
-Endpoint: /api/contact-submissions
-
-Mục đích: tiếp nhận biểu mẫu liên hệ từ Customer.
-
-SAD xác định nghiệp vụ gửi biểu mẫu, nhưng các trường cụ thể và validation còn cần xác nhận. Các vấn đề gồm:
-- Required fields.
-- Phone format và khả năng hỗ trợ mã quốc gia.
-- Email length/format.
-- Message length.
-- Spam protection.
-- Personal data retention.
-- Cơ chế tiếp nhận và phản hồi.
-### 9.9. Admin API
+### 9.8. Admin API
 SAD có đề xuất các nhóm Admin API cho:
 - User / Role.
 - Product.
@@ -858,8 +770,6 @@ SAD có đề xuất các nhóm Admin API cho:
 - Product Price.
 - Category.
 - Blog.
-- Contact Submission.
-- Contact Submission Status.
 - Reporting.
 Tuy nhiên, SAD nêu rõ request/response chi tiết của Admin API chưa được hoàn thiện. Các endpoint quản trị cần được rà soát lại theo bảng API trong SAD và các Open Issues trước khi tạo API contract chính thức.
 
@@ -871,10 +781,9 @@ Tuy nhiên, SAD nêu rõ request/response chi tiết của Admin API chưa đư�
 | Product Price | Quản lý giá sản phẩm | OI-008, OI-015, OI-016 |
 | Category | Quản lý danh mục | OI-009 |
 | Blog | Quản lý bài viết | OI-006, OI-024 |
-| Contact Submission | Xem và xử lý yêu cầu liên hệ | OI-002, OI-020 |
 | Reporting | Xem báo cáo | OI-007 |
 
-### 9.10. Hướng dẫn triển khai API
+### 9.9. Hướng dẫn triển khai API
 Các nội dung sau là khuyến nghị kỹ thuật để triển khai, không phải yêu cầu nghiệp vụ mới trong SAD:
 - Tách Public API khỏi Protected Admin API.
 - Validate request tại Backend.
@@ -900,12 +809,10 @@ Bảng dưới đây là định hướng suy ra từ mô tả Actor trong SAD, 
 | Chức năng | Customer | Staff | Admin |
 |---|---|---|---|
 | Xem Product và Blog công khai | Có | Có | Có |
-| Gửi Contact Submission | Có | Có | Có |
 | Quản lý Product | Không | Theo quyền được cấp | Dự kiến |
 | Quản lý Product Image / Price | Không | Theo quyền được cấp | Dự kiến |
 | Quản lý Product Type / Category | Không | Cần xác nhận | Cần xác nhận |
 | Quản lý Blog | Không | Theo quyền được cấp | Dự kiến |
-| Xem và xử lý Contact Submission | Không | Dự kiến | Dự kiến |
 | Quản lý User / Role | Không | Chưa xác định | Dự kiến |
 | Xem Reporting | Không | Chưa xác định | Cần xác nhận phạm vi |
 
@@ -922,7 +829,6 @@ Bảng dưới đây là định hướng suy ra từ mô tả Actor trong SAD, 
 - Login rate limiting.
 - Account lockout.
 - Audit log cho thao tác quản trị.
-- Phân quyền truy cập Contact Submission và dữ liệu cá nhân.
 Không đưa ra thiết kế chi tiết cho các nội dung này như thể đã được chủ dự án phê duyệt.
 
 ## 11. Image Storage Architecture
@@ -973,7 +879,6 @@ Bảng dưới đây tổng hợp các mối quan tâm kiến trúc và những 
 | Availability | SAD chưa nêu SLA | Xác định yêu cầu uptime và phương án vận hành |
 | Backup / Recovery | Chưa có chính sách | Xác định lịch backup, retention và quy trình restore |
 | Observability | Chưa có quyết định | Lựa chọn Logging, Error Tracking và Monitoring khi lập kế hoạch triển khai |
-| Privacy | Contact Submission lưu thông tin khách hàng | Chốt dữ liệu thu thập, quyền truy cập và retention policy |
 | Maintainability | Định hướng module Backend và ORM | Tách module theo nghiệp vụ; duy trì API/data contracts |
 | Scalability | Chưa có số liệu tải | Đánh giá sau khi có traffic assumptions và yêu cầu hiệu năng |
 
@@ -989,7 +894,6 @@ an-jewelry/
 │   ├── features/
 │   │   ├── products/
 │   │   ├── blog/
-│   │   ├── contact/
 │   │   └── admin/
 │   ├── lib/                           # API client and shared utilities
 │   └── public/                        # Static assets
@@ -1004,7 +908,6 @@ an-jewelry/
 │   │   ├── product-prices/
 │   │   ├── categories/                # Only after Category is approved
 │   │   ├── blog/
-│   │   ├── contact-submissions/
 │   │   └── reporting/                 # Only if approved
 │   └── prisma/
 │       ├── schema.prisma
@@ -1057,8 +960,6 @@ Phụ lục D của SAD là danh sách Open Issues chính thức. Bảng dưới
 
 | Open Issue | Nội dung cần xác nhận | Ảnh hưởng đến kiến trúc |
 |---|---|---|
-| OI-001 | Trường dữ liệu và quy tắc của Contact Form | Frontend form, API DTO, validation |
-| OI-002 | Quy trình tiếp nhận và xử lý Contact Submission | Contact Module, Admin/Staff workflow |
 | OI-004 | Phân quyền Admin/Staff | Authentication, Authorization, Admin UI |
 | OI-005 | Phạm vi và thao tác Product Management | Product Module và Admin API |
 | OI-006 | Phạm vi Blog Management và quy tắc nội dung | Blog Module, publication workflow |
@@ -1072,8 +973,6 @@ Phụ lục D của SAD là danh sách Open Issues chính thức. Bảng dưới
 | OI-016 | Số tiền, currency, kiểu dữ liệu và độ chính xác | Price model, sorting, display |
 | OI-017 | Database chính thức và quy ước kiểu chuỗi | Database schema consistency |
 | OI-018 | Image URL/path, thứ tự ảnh và cấu trúc ảnh Blog | Image Storage, Product Detail, Blog |
-| OI-019 | Validation Contact Form, anti-spam và lưu giữ dữ liệu cá nhân | API validation, Security, Privacy |
-| OI-020 | Giá trị status và quy tắc chuyển trạng thái Contact Submission | Contact workflow, Reporting |
 | OI-021 | User/Role model và quan hệ với Staff | Authentication, Authorization, User Management |
 | OI-023 | Pagination, Sorting, API versioning, timezone và Error Format | API standards |
 | OI-024 | Quy tắc xác định Blog được công khai | Blog public query và publication workflow |
@@ -1084,7 +983,6 @@ Theo SAD, cần giải quyết các vấn đề trọng yếu trước khi hoàn
 ### 15.2. Các vấn đề chặn thiết kế API
 - Giá chưa có trường số tiền và quy tắc giá hiện tại rõ ràng.
 - Hình ảnh chưa có đầy đủ URL/path và thứ tự hiển thị.
-- Contact Form chưa chốt field, validation và anti-spam.
 - Slug trên URL chưa được đối chiếu với cấu trúc dữ liệu.
 - Admin Permission, User/Role và Authentication chưa hoàn chỉnh.
 - Pagination, Sorting, API Versioning, timezone và Error Format chưa được chốt.
@@ -1099,7 +997,6 @@ Các tài liệu này cần được hoàn thiện sau khi những Open Issues l
 ## 16. Recommended Implementation Sequence
 Trình tự dưới đây là khuyến nghị triển khai dựa trên các phụ thuộc trong SAD, không phải tiến độ hoặc cam kết thời gian đã được phê duyệt.
 Phase 1 — Xác nhận nghiệp vụ
-- Xác nhận Contact Form và Contact Submission workflow.
 - Xác nhận quyền Admin/Staff.
 - Xác nhận Product Management.
 - Xác nhận Blog Management và publication status.
@@ -1142,31 +1039,22 @@ Phase 5 — Xây dựng Public Website
 - Blog Detail.
 - Contact Information.
 - Responsive UI.
-Phase 6 — Xây dựng Contact Intake
-- Contact Form.
-- Frontend validation.
-- Backend validation.
-- Lưu Contact Submission.
-- Spam protection.
-- Success/error feedback.
-- Chính sách bảo vệ và lưu giữ dữ liệu.
-Phase 7 — Xây dựng Internal Access
+Phase 6 — Xây dựng Internal Access
 - Authentication.
 - User Management.
 - Role / Permission.
 - Backend Authorization.
 - Admin / Staff UI.
 - Các workflow nội bộ được phê duyệt.
-Phase 8 — Xây dựng Content Management
+Phase 7 — Xây dựng Content Management
 - Product Management.
 - Product Image Management.
 - Product Price Management.
 - Category Management nếu được duyệt.
 - Blog Management.
-- Contact Submission Management.
-Phase 9 — Reporting
+Phase 8 — Reporting
 Chỉ triển khai khi Reporting được xác nhận trong phạm vi. Trước khi lập trình cần chốt chỉ số, công thức, thời gian thống kê, nguồn dữ liệu và quyền truy cập.
-Phase 10 — Testing và Release
+Phase 9 — Testing và Release
 - Unit Tests.
 - Integration Tests.
 - API Tests.
@@ -1180,7 +1068,7 @@ Phase 10 — Testing và Release
 
 ## 17. Architecture Guardrails
 Các nguyên tắc cần tuân thủ trong quá trình phát triển:
-1. Giữ phạm vi nền tảng là website giới thiệu sản phẩm trang sức và tiếp nhận Contact Submission.
+1. Giữ phạm vi nền tảng là website giới thiệu sản phẩm trang sức; khách hàng liên hệ trực tiếp qua số điện thoại và các liên kết Facebook, Instagram được công bố.
 2. Không tự ý thêm Shopping Cart, Online Ordering, Online Payment, Order Management hoặc Custom Design.
 3. Xem Next.js là định hướng công nghệ theo SAD; các công nghệ Backend, Database, ORM, Authentication và Image Storage vẫn cần được chốt.
 4. Không coi các API path trong SAD là endpoint đã được triển khai.
