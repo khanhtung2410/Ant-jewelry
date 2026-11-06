@@ -1,6 +1,6 @@
 # Contributing Guide
 
-Cảm ơn bạn đã quan tâm đóng góp cho **Website**.
+Cảm ơn bạn đã quan tâm đóng góp cho **AN JEWELRY**.
 Tài liệu này mô tả quy trình làm việc, quy tắc code, commit và pull request.
 
 > Đọc `README.md` trước để hiểu project làm gì và cách chạy local.
@@ -31,7 +31,7 @@ docs/*      ← chỉ sửa tài liệu
 2. Tạo nhánh mới từ `main`:
 
    ```bash
-   git switch -c feature/task-12-tao-cong-viec
+   git switch -c feature/product-listing
    ```
 
 3. Code, chạy các lệnh kiểm tra phù hợp ở mục Testing, rồi commit theo quy tắc bên dưới.
@@ -39,7 +39,7 @@ docs/*      ← chỉ sửa tài liệu
 4. Push và mở Pull Request vào `main`:
 
    ```bash
-   git push -u origin feature/task-12-tao-cong-viec
+   git push -u origin feature/product-listing
    ```
 
 5. Đảm bảo các kiểm tra bắt buộc và review theo yêu cầu của repository đã hoàn tất trước khi merge. Sau khi merge, xóa nhánh đã hoàn thành.
@@ -47,16 +47,19 @@ docs/*      ← chỉ sửa tài liệu
 **Quy tắc đặt tên nhánh:**
 
 ```
-<type>/<ticket-id>-<kebab-case-mô-tả-ngắn>
+<type>/<kebab-case-mô-tả-ngắn>
 ```
+
+Nếu có ticket ID, dùng `<type>/<ticket-id>-<kebab-case-mô-tả-ngắn>`.
 
 Ví dụ:
 
-- `feature/task-12-create-task`
-- `fix/task-34-search-page-reset`
-- `chore/task-40-upgrade-next`
+- `feature/product-listing`
+- `fix/product-sort-order`
+- `chore/upgrade-next`
+- `docs/update-contact-scope`
 
-Chỉ dùng chữ ASCII, chữ số và dấu gạch ngang trong tên nhánh. Không có ticket ID thì dùng mô tả ngắn, ví dụ `feature/add-register-page`.
+Chỉ dùng chữ ASCII, chữ số và dấu gạch ngang trong tên nhánh. Không có ticket ID thì dùng mô tả ngắn.
 
 ---
 
@@ -68,19 +71,21 @@ Chỉ dùng chữ ASCII, chữ số và dấu gạch ngang trong tên nhánh. Kh
 - **Không commit code chết** — không `console.log`, không code comment-out, không file `.bak`.
 - **Không commit secret** — API key, mật khẩu, JWT secret để trong `.env` (đã có trong `.gitignore`).
 - **Một hàm làm một việc** — hàm > 50 dòng nên tách.
-- **Tên biến/hàm mô tả đúng ý nghĩa** — `getUserById` tốt hơn `getData`.
+- **Tên biến/hàm mô tả đúng ý nghĩa** — `getProductById` tốt hơn `getData`.
 - **Ưu tiên dễ đọc hơn thông minh** — code được đọc nhiều lần hơn viết.
 
 ### Cấu trúc file
 
-```
-app/          ← route, page, layout, API route handler
-components/   ← component giao diện dùng chung
-constants/    ← hằng số và cấu hình domain
-lib/          ← tiện ích và logic dùng chung (auth, database)
+```text
+app/          ← route, page, layout, route handler (hiện có)
+public/       ← static assets (hiện có)
+docs/         ← tài liệu dự án (hiện có)
+components/   ← component giao diện dùng chung (tạo khi cần)
+lib/          ← tiện ích và logic dùng chung (tạo khi cần)
+constants/    ← hằng số và cấu hình domain (tạo khi cần)
 ```
 
-Đặt code gần route hoặc domain đang sử dụng; chỉ tạo thư mục dùng chung khi có nhiều nơi thực sự cần dùng.
+Alias `@/*` trong `tsconfig.json` trỏ về thư mục gốc repository. Đặt code gần route hoặc domain đang sử dụng; chỉ tạo thư mục dùng chung khi có nhiều nơi thực sự cần dùng.
 
 ### Server vs Client Component
 
@@ -90,24 +95,23 @@ lib/          ← tiện ích và logic dùng chung (auth, database)
 
 ### Tầng gọi API
 
-- Không gọi database trực tiếp từ component phía trình duyệt; database chỉ được truy cập trong server-side code/API route.
-- Một số trang hiện gọi API bằng `fetch`, một số luồng dùng API client/hook riêng. Khi mở rộng, ưu tiên tái sử dụng hoặc trích xuất API client/hook nếu logic cần dùng ở nhiều nơi hoặc cần kiểm thử độc lập.
+- Work tree hiện tại chưa có Backend/API. Khi bổ sung, không gọi database trực tiếp từ component phía trình duyệt; database chỉ được truy cập trong server-side code/API route hoặc route handler.
+- Một số trang có thể gọi API bằng `fetch`, một số luồng có thể dùng API client/hook riêng. Khi mở rộng, ưu tiên tái sử dụng hoặc trích xuất API client/hook nếu logic cần dùng ở nhiều nơi hoặc cần kiểm thử độc lập.
 
-### Database (MSSQL)
+### Database (chưa cấu hình)
 
-- Mọi query dùng **parameterized query**, không nối chuỗi:
+- Repository chưa có Database, ORM hoặc migration. `ARCHITECTURE.md` đề xuất PostgreSQL và Prisma nhưng chưa được xác nhận; không tạo schema hoặc migration trước khi có quyết định chính thức.
+- Khi Database được bổ sung, mọi query phải dùng **parameterized query**, không nối chuỗi:
 
   ```ts
   // ❌ Sai — SQL injection
-  db.query(`SELECT * FROM Users WHERE Email = '${email}'`);
+  db.query(`SELECT * FROM Products WHERE Name = '${name}'`);
 
-  // ✅ Đúng
-  db.request()
-    .input("email", email)
-    .query("SELECT * FROM Users WHERE Email = @email");
+  // ✅ Đúng — placeholder parameterized ($1) theo PostgreSQL
+  db.query("SELECT * FROM products WHERE name = $1", [name]);
   ```
 
-- Không viết SQL trong component; đặt truy vấn trong API route hoặc server-side module phù hợp.
+- Không viết SQL trong component; đặt truy vấn trong API route, route handler hoặc server-side module phù hợp.
 - Mọi thay đổi schema phải có file migration, không sửa DB thủ công.
 
 ### Validation
@@ -117,14 +121,9 @@ lib/          ← tiện ích và logic dùng chung (auth, database)
 
 ### Testing
 
-- **Tính năng mới phải có test đi kèm.**
-- Bug fix phải có test tái hiện lỗi trước khi fix.
-- Dùng Vitest và các test hiện có làm mẫu; ưu tiên kiểm thử hàm thuần và hành vi có thể tái hiện một cách ổn định.
-- Với thay đổi giao diện, kiểm tra thủ công các luồng bị ảnh hưởng; repository hiện chưa có script E2E.
-
-```bash
-npm run test:run   # chạy Vitest một lần, trước khi commit
-```
+- Repository hiện **chưa cấu hình test framework** và chưa có script `test`.
+- Với thay đổi giao diện hoặc logic hiện có, kiểm tra thủ công các luồng bị ảnh hưởng và ghi rõ trong Pull Request.
+- Khi bổ sung test framework, đặt test gần code liên quan và ưu tiên kiểm thử hàm thuần cùng hành vi có thể tái hiện ổn định. Cập nhật lệnh chạy test vào README và tài liệu này.
 
 ### Format & Lint
 
@@ -133,6 +132,7 @@ npm run test:run   # chạy Vitest một lần, trước khi commit
 ```bash
 npm run lint             # kiểm tra
 npm run lint -- --fix    # yêu cầu ESLint tự sửa lỗi có thể tự động sửa
+npx tsc --noEmit         # kiểm tra kiểu
 ```
 
 ---
@@ -166,23 +166,22 @@ npm run lint -- --fix    # yêu cầu ESLint tự sửa lỗi có thể tự đ�
 
 ### Scope (tùy chọn)
 
-Dùng tên domain: `auth`, `tasks`, `users`, `admin`, `db`, `ui`.
+Dùng tên domain phù hợp với AN JEWELRY: `home`, `products`, `blog`, `admin`, `ui`, `config`, `docs`. Khi các module `auth` hoặc `db` được bổ sung, có thể dùng thêm các scope đó.
 
 ### Ví dụ
 
 ```
-feat(tasks): add task creation form
+feat(products): add product listing page
 
-fix cause: fetch effect depends on raw searchTerm without resetting
-currentPage. Narrowing the search can leave currentPage beyond totalPages.
+fix(products): keep filters when sort order changes
 
-Refs TASK-34
+docs(requirements): scope contact to phone and social links
+
+chore(config): enable turbopack css loader
 ```
 
 ```
-refactor(users): extract useUsers hook from user list
-
-chore: upgrade Next.js to 16.3.8
+refactor(ui): extract shared product card
 ```
 
 ### Quy tắc viết
@@ -190,12 +189,12 @@ chore: upgrade Next.js to 16.3.8
 - Dòng tiêu đề **≤ 72 ký tự**, không viết hoa đầu câu, không dấu chấm cuối.
 - Dùng chữ ASCII trong commit message để thống nhất với tên nhánh và tránh lỗi encoding ở công cụ.
 - Dùng **thể mệnh lệnh** bằng tiếng Anh: `add` thay vì `added`, `fix` thay vì `fixing`.
-- Mỗi commit là một thay đổi logic hoàn chỉnh — build được, test pass.
+- Mỗi commit là một thay đổi logic hoàn chỉnh — build được, test pass (nếu đã có test).
 - Body giải thích **tại sao**, không phải **cái gì** (cái gì thì diff đã thể hiện).
 - Breaking change: thêm `!` sau type và ghi rõ trong footer:
 
-  ```
-  feat(api)!: change tasks api response format
+  ```text
+  feat(api)!: change products api response format
 
   BREAKING CHANGE: rename the items field to data; this affects all clients.
   ```
@@ -209,18 +208,18 @@ chore: upgrade Next.js to 16.3.8
 - [ ] Đã cập nhật từ `main` mới nhất và giải quyết conflict nếu có.
 - [ ] `npm run lint` pass.
 - [ ] `npx tsc --noEmit` pass.
-- [ ] `npm run test:run` pass.
 - [ ] `npm run build` thành công.
 - [ ] Đã tự review diff trên GitHub.
 - [ ] Đã cập nhật README / docs nếu thay đổi hành vi hoặc cấu hình.
+- [ ] Nếu test framework đã được cấu hình: chạy test liên quan và ghi kết quả.
 
 ### Tiêu đề PR
 
 Theo cùng format Conventional Commits:
 
 ```
-feat(tasks): add task creation form
-fix(tasks): reset page when search changes
+feat(products): add product listing page
+fix(products): keep filters when sort order changes
 ```
 
 ### Mô tả PR
@@ -234,17 +233,15 @@ Tóm tắt ngắn gọn thay đổi. 1–2 câu.
 ## Why
 Lý do / ticket liên quan. Link tới issue nếu có.
 
-Closes TASK-12
-
 ## How
 Cách tiếp cận chính. Điểm cần lưu ý khi review.
-Ví dụ: "Tách logic fetch ra hook useUsers để test được không cần DOM."
+Ví dụ: "Tách logic fetch sản phẩm ra hook để test được không cần DOM."
 
 ## Testing
 Liệt kê các kiểm tra đã chạy và kết quả.
 
-- [ ] Unit test liên quan
 - [ ] Lint, type-check và build
+- [ ] Unit test liên quan (nếu đã cấu hình test framework)
 - [ ] Kiểm tra thủ công (nếu cần), nêu môi trường và kết quả
 
 ## Screenshots (nếu là UI)
@@ -253,7 +250,7 @@ Liệt kê các kiểm tra đã chạy và kết quả.
 | <ảnh> | <ảnh> |
 
 ## Checklist
-- [ ] Test pass
+- [ ] Test pass (nếu đã cấu hình test framework)
 - [ ] Lint pass
 - [ ] Type-check pass
 - [ ] Không có breaking change (hoặc đã ghi rõ ở footer commit)
@@ -282,7 +279,7 @@ Liệt kê các kiểm tra đã chạy và kết quả.
 
 Ví dụ:
 
-```
+```text
 [blocking] Query này nối chuỗi trực tiếp → SQL injection.
 Dùng parameterized query.
 
@@ -312,11 +309,11 @@ Mở issue với template:
 ```markdown
 **Môi trường:** Chrome 120, Windows 11 / local dev
 **Bước tái hiện:**
-1. Đăng nhập
-2. Vào /c/everyday
+1. Chạy `npm run dev` và mở http://localhost:3000
+2. <mô tả thao tác gây lỗi>
 
-**Kết quả mong đợi:** Danh sách lọc theo everyday
-**Kết quả thực tế:** Danh sách rỗng dù có sản phẩm khớp
+**Kết quả mong đợi:** <hành vi mong đợi>
+**Kết quả thực tế:** <hành vi thực tế>
 **Ảnh / log:** <đính kèm>
 ```
 
@@ -325,8 +322,8 @@ Mở issue với template:
 Mô tả **vấn đề cần giải quyết** trước, giải pháp đề xuất sau:
 
 ```markdown
-**Vấn đề:** Tôi không biết công việc nào sắp tới hạn.
-**Đề xuất:** Thêm trường deadline và sắp xếp theo deadline.
+**Vấn đề:** Tôi không tìm được sản phẩm theo danh mục mong muốn.
+**Đề xuất:** Thêm lựa chọn sắp xếp theo giá và tên trên trang danh sách sản phẩm.
 **Ưu tiên:** Cao / Trung bình / Thấp
 ```
 
