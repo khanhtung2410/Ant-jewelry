@@ -1,8 +1,9 @@
 # AN JEWELRY — ARCHITECTURE
 
-> **Trạng thái tài liệu:** Bản dự thảo / kiến trúc đề xuất  
+> **Trạng thái tài liệu:** Kiến trúc đề xuất, đã đối chiếu với work tree hiện tại  
 > **Tài liệu nguồn:** `AN_JEWELRY_SAD_v1.1.docx`  
-> **Trạng thái dự án:** Chưa có codebase. Tài liệu này mô tả kiến trúc đề xuất được xây dựng dựa trên SAD, không phải mô tả một hệ thống đã được triển khai hoặc xác minh.  
+> **Cập nhật theo work tree:** 2026-11-06  
+> **Trạng thái work tree:** Có bộ khung Next.js 16.4.5 (App Router) tại thư mục gốc với React 19.3.0, Tailwind CSS v4, TypeScript strict và ESLint 9. Chưa có Backend, Database, ORM, Authentication, Image Storage, API nghiệp vụ hoặc chức năng nghiệp vụ nào. Các phần còn lại của tài liệu là kiến trúc đề xuất, không phải mô tả một hệ thống đã được triển khai hoặc xác minh.  
 > **Ngôn ngữ:** Nội dung diễn giải bằng tiếng Việt; giữ nguyên các technical terms, tên công nghệ, tên module, tên bảng, tên API, identifier và code terms bằng tiếng Anh.
 
 ---
@@ -17,7 +18,7 @@ Tài liệu này chuyển các nội dung phân tích và thiết kế trong `AN
 - Mô tả mô hình dữ liệu logic ở mức hiện có trong SAD.
 - Định hướng API, Authentication, Authorization và lưu trữ hình ảnh.
 - Ghi nhận các quyết định kỹ thuật còn cần xác nhận để tránh tự ý biến giả định thành yêu cầu chính thức.
-- Làm cơ sở cập nhật kiến trúc khi dự án có codebase và các quyết định thiết kế được phê duyệt.
+- Làm cơ sở cập nhật kiến trúc khi codebase được mở rộng và các quyết định thiết kế được phê duyệt.
 
 ### 1.1. Nguyên tắc xây dựng tài liệu
 
@@ -33,16 +34,16 @@ Các trạng thái được sử dụng:
 
 ### 1.2. Giới hạn của tài liệu
 
-Hiện tại dự án chưa có source code. Vì vậy, tài liệu không khẳng định:
+Work tree hiện tại mới có bộ khung Frontend Next.js ở thư mục gốc và trang mặc định của `create-next-app`; Backend và Database chưa tồn tại. Vì vậy, tài liệu không khẳng định:
 
-- Cấu trúc thư mục thực tế của Frontend hoặc Backend.
-- Phiên bản framework, thư viện hoặc package đang sử dụng.
+- Cấu trúc Frontend hoặc Backend đã hoàn chỉnh; các thư mục `frontend/`, `backend/`, `components/`, `lib/` và `features/` vẫn là đề xuất.
+- Phiên bản framework hoặc package ngoài các dependency đang có trong `package.json`.
 - Database schema vật lý, migrations, indexes hoặc constraints đã tồn tại.
 - Các API endpoint đã được triển khai.
 - Cấu hình Authentication, Authorization hoặc bảo mật đã hoạt động.
 - Hạ tầng Hosting, Deployment, CI/CD, Logging hoặc Monitoring thực tế.
 
-Các sơ đồ, module và cấu trúc thư mục trong tài liệu là định hướng đề xuất, trừ khi được ghi rõ là nội dung đã xác định trong SAD.
+Các sơ đồ, module và cấu trúc thư mục trong tài liệu là định hướng đề xuất, trừ khi được ghi rõ là đã có trong work tree. Phần hiện trạng chỉ mô tả đúng những gì đang tồn tại tại thời điểm cập nhật.
 
 ---
 
@@ -68,6 +69,8 @@ Website **không** hỗ trợ các chức năng sau trong phạm vi hiện tại
 
 Không được tự ý đưa các chức năng nằm ngoài phạm vi trên vào kiến trúc hoặc kế hoạch triển khai nếu chưa có thay đổi yêu cầu chính thức từ chủ dự án.
 
+Trong work tree hiện tại, website mới là bộ khung Next.js với trang mặc định của `create-next-app`. Chưa có trang sản phẩm, Blog, thông tin liên hệ hoặc khu vực quản trị nào được triển khai.
+
 ### 2.2. Mục tiêu hệ thống
 
 1. Cung cấp giao diện trực tuyến để giới thiệu sản phẩm trang sức.
@@ -78,7 +81,9 @@ Không được tự ý đưa các chức năng nằm ngoài phạm vi trên và
 
 ### 2.3. Phạm vi chức năng chính
 
-| Nhóm chức năng | Nội dung | Actor chính | Trạng thái |
+Trạng thái trong bảng phản ánh mức độ xác định của yêu cầu trong SAD, **không phải** trạng thái triển khai. Tất cả chức năng nghiệp vụ dưới đây hiện chưa có trong work tree.
+
+| Nhóm chức năng | Nội dung | Actor chính | Trạng thái yêu cầu |
 |---|---|---|---|
 | Trang chủ | Hiển thị nội dung giới thiệu và điều hướng website | Customer | Nội dung tĩnh hay lấy từ API cần xác nhận |
 | Sản phẩm | Xem danh sách sản phẩm | Customer | Đã xác định |
@@ -97,6 +102,8 @@ Không được tự ý đưa các chức năng nằm ngoài phạm vi trên và
 ---
 
 ## 3. Actor và vai trò
+
+> Work tree hiện chưa có Authentication, User/Role model hoặc giao diện Admin/Staff. Các vai trò dưới đây là định hướng nghiệp vụ từ SAD.
 
 ### 3.1. Customer
 
@@ -150,19 +157,24 @@ Quyền cụ thể của Staff và mối quan hệ giữa Staff với User/Role 
 
 ## 4. Định hướng công nghệ
 
-### 4.1. Technology Stack đề xuất
+### 4.1. Technology Stack
 
-SAD v1.1 nêu định hướng sử dụng Next.js. Các công nghệ dưới đây là phương án đề xuất, không phải thông tin xác nhận về một hệ thống đang vận hành.
+SAD v1.1 nêu định hướng sử dụng Next.js. Work tree hiện đã có bộ khung Frontend; các thành phần Backend, Database, ORM, Authentication và Image Storage vẫn là phương án đề xuất, chưa được xác nhận hoặc cấu hình.
 
-| Thành phần | Công nghệ đề xuất | Vai trò | Trạng thái |
+| Thành phần | Công nghệ | Vai trò | Trạng thái trong work tree |
 |---|---|---|---|
-| Frontend | Next.js | Xây dựng giao diện website | Định hướng theo yêu cầu dự án |
-| Backend | Node.js / NestJS | Xử lý nghiệp vụ và cung cấp API | Đề xuất |
-| Database | PostgreSQL | Lưu trữ dữ liệu hệ thống | Đề xuất |
-| ORM | Prisma | Truy vấn và quản lý dữ liệu | Đề xuất |
-| Authentication | JWT | Xác thực người dùng nội bộ | Đề xuất |
-| Image Storage | Cloudinary | Lưu trữ hình ảnh sản phẩm và Blog | Đề xuất |
-| Version Control | Git / GitHub | Quản lý mã nguồn và cộng tác | Đề xuất |
+| Frontend | Next.js 16.4.5 (App Router) | Xây dựng giao diện website | Đã cài đặt |
+| UI runtime | React 19.3.0 | Render giao diện | Đã cài đặt |
+| Styling | Tailwind CSS v4 qua `@tailwindcss/turbopack` | Utility CSS | Đã cấu hình |
+| Ngôn ngữ | TypeScript 5 (`strict`) | Type safety | Đã cấu hình |
+| Lint | ESLint 9 + `eslint-config-next` | Kiểm tra chất lượng mã | Đã cấu hình |
+| Package manager | npm (`package-lock.json`) | Quản lý dependencies | Đang sử dụng |
+| Backend | Node.js / NestJS | Xử lý nghiệp vụ và cung cấp API | Đề xuất, chưa có |
+| Database | PostgreSQL | Lưu trữ dữ liệu hệ thống | Đề xuất, chưa cấu hình |
+| ORM | Prisma | Truy vấn và quản lý dữ liệu | Đề xuất, chưa cấu hình |
+| Authentication | JWT | Xác thực người dùng nội bộ | Đề xuất, chưa cấu hình |
+| Image Storage | Cloudinary | Lưu trữ hình ảnh sản phẩm và Blog | Đề xuất, chưa cấu hình |
+| Version Control | Git / GitHub | Quản lý mã nguồn và cộng tác | Đang sử dụng |
 
 Cần đánh giá và chốt Backend, Database, Image Storage và phương thức Authentication trước khi thiết kế kỹ thuật chi tiết.
 
@@ -174,6 +186,8 @@ Cần đánh giá và chốt Backend, Database, Image Storage và phương thứ
 - Hiển thị danh sách và chi tiết sản phẩm.
 - Hiển thị Blog, số điện thoại và các liên kết Facebook, Instagram.
 - Có thể xây dựng khu vực Admin/Staff nếu lựa chọn dùng chung một Next.js application.
+
+Trong work tree hiện tại, Next.js mới chứa trang mặc định của `create-next-app`; các trang public và Admin/Staff nêu trên chưa được triển khai.
 
 **Node.js / NestJS**
 
@@ -222,7 +236,30 @@ Cần đánh giá và chốt Backend, Database, Image Storage và phương thứ
 
 ## 5. Tổng quan kiến trúc hệ thống
 
-### 5.1. Kiến trúc đề xuất
+### 5.1. Hiện trạng work tree
+
+Cấu trúc thực tế tại thời điểm cập nhật:
+
+```text
+ant-jewelry/
+├── app/                  # layout.tsx, page.tsx, globals.css
+├── public/               # Static assets
+├── docs/                 # Tài liệu dự án
+├── next.config.ts        # Cấu hình Next.js
+├── eslint.config.mjs     # Cấu hình ESLint
+├── tsconfig.json         # Cấu hình TypeScript
+├── package.json          # Dependencies và scripts
+├── package-lock.json     # Khóa phiên bản dependencies
+├── AGENTS.md             # Quy tắc làm việc với Next.js
+└── .gitignore
+```
+
+- Chỉ có một Next.js application ở thư mục gốc; chưa có thư mục `frontend/` hoặc `backend/`.
+- `app/page.tsx` đang là trang mặc định của `create-next-app`; `app/layout.tsx` khai báo metadata mặc định.
+- Chưa có API route, route handler nghiệp vụ, Database, Prisma, Authentication hoặc Cloudinary.
+- Các script hiện có: `dev`, `build`, `start`, `lint`. Chưa có script `test`.
+
+### 5.2. Kiến trúc đề xuất
 
 Dựa trên Technology Direction trong SAD, hệ thống có thể được tổ chức theo các lớp:
 
@@ -233,7 +270,7 @@ Dựa trên Technology Direction trong SAD, hệ thống có thể được tổ
 5. **Data Layer:** PostgreSQL.
 6. **External Service:** Cloudinary cho hình ảnh nếu được lựa chọn.
 
-Sơ đồ dưới đây là kiến trúc logic đề xuất:
+Sơ đồ dưới đây là kiến trúc logic đề xuất, chưa có trong work tree:
 
 ```mermaid
 flowchart TB
@@ -294,7 +331,7 @@ flowchart TB
     Blog -->|Asset operations, if applicable| Cloudinary
 ```
 
-### 5.2. Presentation Layer
+### 5.3. Presentation Layer
 
 Presentation Layer chịu trách nhiệm giao tiếp với người dùng thông qua giao diện Next.js.
 
@@ -319,7 +356,7 @@ Admin / Staff Interface
 
 SAD chưa xác định Home Page và Contact Information là nội dung tĩnh trên Frontend hay lấy từ API. Cần xác nhận trước khi quyết định cách tổ chức data fetching.
 
-### 5.3. Application Layer
+### 5.4. Application Layer
 
 Application Layer dự kiến sử dụng NestJS để cung cấp REST API.
 
@@ -332,11 +369,11 @@ Trách nhiệm chính:
 - Truy cập dữ liệu thông qua Prisma.
 - Trả về response dạng JSON.
 
-### 5.4. Domain / Module Layer
+### 5.5. Domain / Module Layer
 
 Backend được định hướng chia thành các module theo nghiệp vụ. Chi tiết được trình bày tại mục 6.
 
-### 5.5. Data Access Layer
+### 5.6. Data Access Layer
 
 Prisma được đề xuất làm ORM để giao tiếp với PostgreSQL.
 
@@ -346,7 +383,7 @@ Trách nhiệm dự kiến:
 - Thực hiện thao tác tạo, cập nhật và xóa dữ liệu theo nghiệp vụ.
 - Quản lý migrations sau khi Database Schema được phê duyệt.
 
-### 5.6. Data Layer
+### 5.7. Data Layer
 
 PostgreSQL là Database được đề xuất trong SAD. Các bảng logic hiện có chưa đủ điều kiện để coi là Database Schema vật lý cuối cùng.
 
@@ -465,6 +502,8 @@ Không nên triển khai module này như một yêu cầu bắt buộc trước
 
 ## 7. System Request Flow
 
+> Work tree chưa có API, Database hoặc luồng dữ liệu nào được triển khai. Các sơ đồ dưới đây là luồng đề xuất từ SAD.
+
 ### 7.1. Luồng xem danh sách sản phẩm
 
 ```mermaid
@@ -523,6 +562,9 @@ Luồng tổng quát dự kiến:
 JWT là phương án được đề xuất trong SAD. Token lifecycle, refresh token, logout, thu hồi token và chính sách bảo mật tài khoản cần được xác định trước khi triển khai.
 
 ## 8. Logical Data Architecture
+
+> Work tree chưa có Database hoặc Prisma. Toàn bộ entity, quan hệ và ERD dưới đây là mô hình logic từ SAD, không phải schema vật lý đã tồn tại.
+
 ### 8.1. Các entity được xác định trong SAD
 SAD Appendix A và Section 6 đề cập các bảng logic sau:
 
@@ -655,6 +697,8 @@ Theo SAD, Database physical design chỉ nên được thực hiện sau khi cá
 Do đó, ERD trong tài liệu này chỉ là Logical Data Model để rà soát, không được dùng thay thế cho DDL hoặc Prisma Schema đã phê duyệt.
 
 ## 9. API Architecture
+
+> Work tree chưa có API route hoặc route handler nào. Toàn bộ endpoint dưới đây là đề xuất từ SAD, không phải API đã được triển khai.
 
 ### 9.1. Nguyên tắc chung
 SAD đề xuất các quy ước API sau:
@@ -796,6 +840,9 @@ Các nội dung sau là khuyến nghị kỹ thuật để triển khai, không 
 - Duy trì sự tương thích giữa API contract, Prisma Schema và Frontend data model.
 
 ## 10. Authentication và Authorization
+
+> Work tree chưa có Authentication, Authorization hoặc User/Role model. Nội dung dưới đây là định hướng đề xuất.
+
 ### 10.1. Định hướng
 SAD đề xuất JWT để xác thực người dùng nội bộ. Tuy nhiên, cấu trúc User/Role và quan hệ với Staff chưa được xác định đầy đủ.
 
@@ -832,6 +879,9 @@ Bảng dưới đây là định hướng suy ra từ mô tả Actor trong SAD, 
 Không đưa ra thiết kế chi tiết cho các nội dung này như thể đã được chủ dự án phê duyệt.
 
 ## 11. Image Storage Architecture
+
+> Work tree chưa cấu hình Cloudinary hoặc bất kỳ dịch vụ lưu trữ hình ảnh nào. Nội dung dưới đây là định hướng đề xuất.
+
 ### 11.1. Định hướng
 Cloudinary là công nghệ lưu trữ hình ảnh được đề xuất trong SAD. Việc sử dụng Cloudinary cần được xác nhận trước khi triển khai.
 
@@ -884,8 +934,32 @@ Bảng dưới đây tổng hợp các mối quan tâm kiến trúc và những 
 
 Không tự đặt SLA, throughput, response time, availability target hoặc Recovery Objective khi chưa có yêu cầu được xác nhận.
 
-## 13. Đề xuất cấu trúc Repository
-SAD không quy định cấu trúc thư mục source code. Cấu trúc dưới đây chỉ là gợi ý nếu dự án lựa chọn tách Next.js Frontend và NestJS Backend.
+## 13. Cấu trúc Repository
+
+### 13.1. Cấu trúc hiện tại
+
+SAD không quy định cấu trúc thư mục source code. Work tree hiện tại chỉ có một Next.js application ở thư mục gốc:
+
+```text
+ant-jewelry/
+├── app/                  # App Router: layout, page, global styles
+├── public/               # Static assets
+├── docs/                 # Tài liệu dự án
+├── next.config.ts        # Cấu hình Next.js
+├── eslint.config.mjs     # Cấu hình ESLint
+├── tsconfig.json         # Cấu hình TypeScript
+├── package.json          # Dependencies và scripts
+├── package-lock.json     # Khóa phiên bản dependencies
+├── AGENTS.md             # Quy tắc làm việc với Next.js
+└── .gitignore
+```
+
+Chưa có thư mục `frontend/`, `backend/`, `components/`, `features/` hoặc `lib/`.
+
+### 13.2. Cấu trúc đề xuất nếu tách Frontend và Backend
+
+Cấu trúc dưới đây chỉ là gợi ý nếu dự án lựa chọn tách Next.js Frontend và NestJS Backend. Chưa có thư mục `frontend/` hoặc `backend/` trong work tree.
+
 ```text
 an-jewelry/
 ├── frontend/                         # Next.js application
@@ -921,16 +995,19 @@ an-jewelry/
 └── README.md
 ```
 
-### 13.1. Nguyên tắc tổ chức
-- frontend/ chứa Next.js application.
-- backend/ chứa NestJS application.
-- features/ ở Frontend gom UI và logic theo nghiệp vụ.
-- src/ ở Backend chứa các module nghiệp vụ.
-- prisma/ chứa Prisma Schema, migrations và seed data sau khi Database Model được phê duyệt.
-- docs/ chứa tài liệu dự án.
+### 13.3. Nguyên tắc tổ chức
+- Hiện tại code Frontend nằm trong `app/` ở thư mục gốc; `frontend/` và `backend/` chỉ được tạo sau khi kiến trúc tách ứng dụng được chốt.
+- Nếu tách ứng dụng: `frontend/` chứa Next.js application, `backend/` chứa NestJS application.
+- `features/` ở Frontend gom UI và logic theo nghiệp vụ.
+- `src/` ở Backend chứa các module nghiệp vụ.
+- `prisma/` chứa Prisma Schema, migrations và seed data sau khi Database Model được phê duyệt.
+- `docs/` chứa tài liệu dự án.
 Cấu trúc cuối cùng có thể thay đổi nếu dự án chọn Monorepo hoặc Shared Packages. SAD chưa đưa ra quyết định này.
 
 ## 14. Environment và Deployment
+
+> Work tree hiện chưa có `.env`, `.env.example` hoặc cấu hình triển khai nào. `.env*` đã nằm trong `.gitignore`. Các nội dung dưới đây là việc cần quyết định khi chuẩn bị triển khai.
+
 SAD chưa xác định hạ tầng triển khai. Các nội dung sau cần được lựa chọn trong giai đoạn chuẩn bị triển khai.
 ### 14.1. Các thành phần cần quyết định
 - Hosting platform cho Next.js.
@@ -1022,14 +1099,14 @@ Phase 3 — Hoàn thiện API Contract
 - Chốt API Versioning.
 - Chốt Authentication và Authorization behavior.
 Phase 4 — Khởi tạo Project
-- Khởi tạo Next.js application.
-- Khởi tạo NestJS application.
-- Cấu hình PostgreSQL.
-- Cấu hình Prisma.
-- Cấu hình environment variables.
-- Thiết lập Git workflow.
-- Thiết lập linting, formatting và coding conventions.
-- Tạo project README và tài liệu kỹ thuật cơ bản.
+- [x] Khởi tạo Next.js application (16.4.5, App Router) ở thư mục gốc.
+- [x] Cấu hình Tailwind CSS v4, TypeScript strict và ESLint 9.
+- [x] Thiết lập Git workflow.
+- [x] Tạo tài liệu dự án trong `docs/`.
+- [ ] Khởi tạo NestJS application.
+- [ ] Cấu hình PostgreSQL.
+- [ ] Cấu hình Prisma.
+- [ ] Cấu hình environment variables.
 Phase 5 — Xây dựng Public Website
 - Home Page.
 - Product Listing.
@@ -1070,32 +1147,34 @@ Phase 9 — Testing và Release
 Các nguyên tắc cần tuân thủ trong quá trình phát triển:
 1. Giữ phạm vi nền tảng là website giới thiệu sản phẩm trang sức; khách hàng liên hệ trực tiếp qua số điện thoại và các liên kết Facebook, Instagram được công bố.
 2. Không tự ý thêm Shopping Cart, Online Ordering, Online Payment, Order Management hoặc Custom Design.
-3. Xem Next.js là định hướng công nghệ theo SAD; các công nghệ Backend, Database, ORM, Authentication và Image Storage vẫn cần được chốt.
+3. Next.js đã được cài đặt ở thư mục gốc; các công nghệ Backend, Database, ORM, Authentication và Image Storage vẫn cần được chốt.
 4. Không coi các API path trong SAD là endpoint đã được triển khai.
 5. Không tạo Database migrations cuối cùng khi quan hệ và trường dữ liệu quan trọng còn chưa được xác nhận.
 6. Thực hiện Authorization ở Backend; không chỉ dựa vào việc ẩn giao diện trên Frontend.
 7. Giữ Product Type và Product Category là hai khái niệm riêng nếu nghiệp vụ cần quản lý độc lập.
-8. Phân biệt nội dung Đã xác định, Cần xác nhận và Đề xuất.
+8. Phân biệt nội dung đã có trong work tree với nội dung Đã xác định, Cần xác nhận và Đề xuất.
 9. Mọi thay đổi phạm vi nghiệp vụ cần được xác nhận và cập nhật vào tài liệu liên quan.
-10. Khi có source code, cập nhật tài liệu này theo implementation thực tế; không giữ các đề xuất cũ nếu kiến trúc triển khai đã được quyết định khác.
+10. Khi implementation thay đổi, cập nhật tài liệu này theo work tree thực tế; không giữ các đề xuất cũ nếu kiến trúc triển khai đã được quyết định khác.
 11. Ghi lại các quyết định kiến trúc quan trọng cùng lý do và ảnh hưởng.
 12. Không đưa secrets hoặc credentials vào source control.
 
 ## 18. Architecture Decision Log
-Bảng này dùng để theo dõi các quyết định cần được phê duyệt. Các trạng thái ban đầu phản ánh nội dung SAD hiện có.
+Bảng này dùng để theo dõi các quyết định đã có trong work tree và các quyết định còn cần được phê duyệt.
 
 | Decision ID | Nội dung | Phương án hiện tại | Trạng thái |
 |---|---|---|---|
-| ADR-001 | Frontend framework | Next.js | Định hướng theo yêu cầu dự án |
+| ADR-001 | Frontend framework | Next.js 16.4.5 (App Router) | Đã cài đặt ở thư mục gốc |
 | ADR-002 | Backend framework | Node.js / NestJS | Đề xuất, cần chốt |
 | ADR-003 | Database | PostgreSQL | Đề xuất, cần chốt |
 | ADR-004 | ORM | Prisma | Đề xuất |
 | ADR-005 | Internal Authentication | JWT | Đề xuất, cần thiết kế chi tiết |
 | ADR-006 | Image Storage | Cloudinary | Đề xuất, cần chốt |
 | ADR-007 | API Style | REST-style JSON API | Đề xuất |
-| ADR-008 | Repository structure | Separate frontend/ and backend/ | Gợi ý, chưa được SAD quyết định |
+| ADR-008 | Repository structure | Một Next.js app ở thư mục gốc | Hiện tại; tách frontend/ và backend/ chưa được quyết định |
 | ADR-009 | Reporting scope | Chỉ triển khai nếu được xác nhận | Cần xác nhận |
 | ADR-010 | Category model | Tách khỏi Product Type nếu nghiệp vụ cần | Cần xác nhận |
+| ADR-011 | Styling | Tailwind CSS v4 qua `@tailwindcss/turbopack` | Đã cấu hình |
+| ADR-012 | Language | TypeScript 5, chế độ `strict` | Đã cấu hình |
 
 Khi có quyết định chính thức, cần cập nhật phương án, trạng thái, ngày quyết định, người phê duyệt và lý do lựa chọn.
 
@@ -1117,4 +1196,4 @@ Tài liệu nguồn chính:
 - Appendix E — Change Log.
 SAD v1.1 là bản dự thảo phục vụ rà soát và xác nhận nghiệp vụ. Tài liệu nêu rõ Physical Database Design, Admin API request/response chi tiết, UI Specification và Test Specification chưa hoàn thiện.
 
-Vì vậy, ARCHITECTURE.md này là kiến trúc đề xuất ở giai đoạn trước khi phát triển. Nội dung phải được cập nhật khi các Open Issues được đóng và khi source code thực tế được tạo ra.
+Vì vậy, ARCHITECTURE.md này vẫn là kiến trúc đề xuất cho các phần chưa triển khai. Phần hiện trạng đã được cập nhật theo bộ khung Next.js trong work tree; nội dung cần tiếp tục được cập nhật khi các Open Issues được đóng và khi có thêm source code thực tế.

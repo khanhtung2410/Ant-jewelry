@@ -6,119 +6,154 @@ Website giới thiệu sản phẩm trang sức; khách hàng liên hệ trực 
 
 AN JEWELRY là website dành cho khách hàng có nhu cầu tìm hiểu các sản phẩm trang sức và liên hệ trực tiếp với cửa hàng.
 
-Các chức năng chính:
+**Trạng thái hiện tại:** repository mới có bộ khung Next.js (App Router) và trang mặc định của `create-next-app`. Các chức năng nghiệp vụ bên dưới là định hướng theo yêu cầu, **chưa được triển khai**.
+
+Chức năng định hướng:
 
 - Xem danh sách và thông tin chi tiết sản phẩm trang sức.
 - Lọc và sắp xếp sản phẩm theo các tiêu chí được hỗ trợ.
 - Xem thông tin các loại trang sức và danh mục sản phẩm.
 - Xem danh sách và nội dung chi tiết Blog.
 - Xem số điện thoại và các liên kết Facebook, Instagram của cửa hàng.
-- Hỗ trợ khu vực quản trị nội dung theo quyền được cấp.
+- Hỗ trợ khu vực quản trị nội dung theo quyền được cấp (dự kiến).
 
-**Phạm vi hiện tại:** Website giới thiệu sản phẩm; khách hàng liên hệ trực tiếp qua số điện thoại và các liên kết Facebook, Instagram được công bố. Hệ thống không bao gồm Shopping Cart, Online Ordering, Online Payment hoặc Custom Jewelry Design.
+**Phạm vi hiện tại:** Website giới thiệu sản phẩm; khách hàng liên hệ trực tiếp qua số điện thoại và các liên kết Facebook, Instagram được công bố. Hệ thống không bao gồm Shopping Cart, Online Ordering, Online Payment hoặc Custom Jewelry Design. Không có biểu mẫu liên hệ hoặc luồng tiếp nhận/gửi yêu cầu liên hệ.
 
 ## 2. Công nghệ
 
-Các công nghệ được định hướng trong tài liệu kiến trúc:
+Các thành phần đang có trong work tree:
 
 | Thành phần | Công nghệ | Trạng thái |
 |---|---|---|
-| Frontend | Next.js | Định hướng theo yêu cầu dự án |
-| Backend | Node.js / NestJS | Đề xuất, chưa xác nhận |
-| Database | PostgreSQL | Đề xuất, chưa xác nhận |
-| ORM | Prisma | Đề xuất, chưa xác nhận |
-| Authentication | JWT | Đề xuất, chưa xác nhận |
-| Image Storage | Cloudinary | Đề xuất, chưa xác nhận |
-| Version Control | Git / GitHub | Định hướng sử dụng |
+| Frontend | Next.js 16.4.5 (App Router) | Đã cài đặt |
+| UI runtime | React 19.3.0 | Đã cài đặt |
+| Styling | Tailwind CSS v4 qua `@tailwindcss/turbopack` | Đã cấu hình |
+| Ngôn ngữ | TypeScript 5, chế độ `strict` | Đã cấu hình |
+| Lint | ESLint 9 + `eslint-config-next` | Đã cấu hình |
+| Package manager | npm (`package-lock.json`) | Đang sử dụng |
+| Version Control | Git / GitHub | Đang sử dụng |
+| Backend | Node.js / NestJS | Đề xuất, chưa có trong work tree |
+| Database / ORM | PostgreSQL / Prisma | Đề xuất, chưa cấu hình |
+| Authentication | JWT | Đề xuất, chưa cấu hình |
+| Image Storage | Cloudinary | Đề xuất, chưa cấu hình |
 
-TBD — Phiên bản chính xác của Next.js, Node.js, NestJS, PostgreSQL và các thư viện liên quan là bao nhiêu?
-
-TBD — Backend, Database, ORM, Authentication và Image Storage đã được lựa chọn chính thức hay vẫn đang ở giai đoạn đề xuất?
+Các lựa chọn Backend, Database, ORM, Authentication và Image Storage vẫn là đề xuất trong `ARCHITECTURE.md`, chưa được xác nhận hoặc triển khai.
 
 ## 3. Yêu cầu / Điều kiện tiên quyết
 
-Hiện chưa có source code hoặc cấu hình môi trường phát triển để xác định chính xác các yêu cầu cài đặt.
-
-TBD — Phiên bản Node.js tối thiểu cần sử dụng là bao nhiêu?
-
-TBD — Dự án yêu cầu phiên bản package manager nào (npm, pnpm, yarn hoặc công cụ khác)?
-
-TBD — Dự án sử dụng PostgreSQL phiên bản nào và có yêu cầu cài đặt Database local hay không?
+- **Node.js** >= 20.9.0 (theo yêu cầu của Next.js 16.4.5).
+- **npm** (repository dùng `package-lock.json`).
+- **Git** để clone và quản lý phiên bản.
+- Chưa cần Database, ORM, tài khoản Cloudinary hoặc biến môi trường cho bộ khung hiện tại.
+- Yêu cầu phiên bản PostgreSQL và cấu hình Database local: TBD, chỉ áp dụng sau khi Backend/Database được xác nhận.
 
 ## 4. Bắt đầu sử dụng
 
-Chưa thể cung cấp hướng dẫn clone, install và run chính xác vì hiện chưa có repository source code, package configuration hoặc entry point được xác nhận.
-
 ### 4.1. Clone repository
 
-TBD — URL Git repository chính thức của AN JEWELRY là gì?
+```bash
+git clone https://github.com/khanhtung2410/ant-jewelry.git
+cd ant-jewelry
+```
+
 
 ### 4.2. Cài đặt dependencies
 
-TBD — Frontend và Backend sử dụng lệnh cài đặt dependencies nào? Vui lòng cung cấp `package.json` hoặc xác nhận package manager và cấu trúc repository.
+```bash
+npm install
+```
 
 ### 4.3. Chạy dự án local
 
-TBD — Lệnh chính xác để chạy Frontend và Backend trong môi trường local là gì?
+```bash
+npm run dev
+```
 
-TBD — Entry point chính thức của Frontend và Backend là file hoặc thư mục nào?
+Mở [http://localhost:3000](http://localhost:3000). Hiện tại trang chủ hiển thị nội dung mặc định của `create-next-app`, chưa phải giao diện AN JEWELRY.
+
+### 4.4. Build và chạy production
+
+```bash
+npm run build
+npm run start
+```
+
+### 4.5. Kiểm tra chất lượng mã
+
+```bash
+npm run lint
+npx tsc --noEmit
+```
 
 ## 5. Cấu hình
 
-Chưa có file cấu hình hoặc `.env.example` từ source code để xác nhận tên biến môi trường và giá trị mặc định.
+Các file cấu hình hiện có:
 
-| Tên biến / File | Mục đích | Giá trị mặc định |
-|---|---|---|
-| TBD — Database configuration | Cấu hình kết nối Database | TBD — Chưa có cấu hình được xác nhận |
-| TBD — JWT configuration | Cấu hình Authentication | TBD — Chưa có cấu hình được xác nhận |
-| TBD — Cloudinary configuration | Cấu hình Image Storage | TBD — Chưa có cấu hình được xác nhận |
+| File | Mục đích |
+|---|---|
+| `next.config.ts` | Cấu hình Next.js: `cacheComponents`, `partialPrefetching`, `experimental.agentFeedback` và loader Tailwind CSS cho Turbopack |
+| `eslint.config.mjs` | Cấu hình ESLint 9 với `eslint-config-next` |
+| `tsconfig.json` | Cấu hình TypeScript strict; alias `@/*` trỏ về thư mục gốc repository |
+| `package.json` | Dependencies và các script `dev`, `build`, `start`, `lint` |
+| `.gitignore` | Bỏ qua `node_modules`, `.next`, `out`, `build`, file môi trường và file build của TypeScript |
 
-TBD — Những biến môi trường nào thực sự được sử dụng trong dự án? Vui lòng cung cấp `.env.example` hoặc các file cấu hình liên quan.
+Hiện **chưa có** `.env`, `.env.example` hoặc biến môi trường nào được xác nhận. `.env*` đã nằm trong `.gitignore`.
 
-Không đưa credentials, passwords, API keys hoặc secrets vào Git repository.
+Các cấu hình dự kiến cho Database, JWT và Cloudinary: TBD, chưa có trong work tree. Không commit credentials, passwords, API keys hoặc secrets vào repository.
 
 ## 6. Sử dụng
 
-Chức năng dự kiến của hệ thống:
+Work tree hiện tại chỉ có trang chủ mặc định của Next.js. Luồng người dùng dự kiến (chưa triển khai):
 
 1. Khách hàng truy cập website AN JEWELRY.
 2. Khách hàng xem danh sách sản phẩm trang sức.
 3. Khách hàng chọn sản phẩm để xem thông tin chi tiết.
 4. Khách hàng xem nội dung Blog hoặc thông tin liên hệ để liên hệ trực tiếp với cửa hàng.
 
-TBD — URL local và tài khoản truy cập khu vực Admin/Staff là gì sau khi hệ thống được triển khai?
+Chưa có khu vực Admin/Staff, API nghiệp vụ hoặc dữ liệu sản phẩm/Blog trong work tree.
 
 ## 7. Cấu trúc dự án
 
-Chưa có repository source code để xác nhận cấu trúc thư mục thực tế.
+Cấu trúc thực tế hiện tại:
 
-Cấu trúc tham khảo được đề xuất trong `ARCHITECTURE.md`:
+```text
+ant-jewelry/
+├── app/                  # App Router: layout, page, global styles
+├── public/               # Static assets
+├── docs/                 # Tài liệu dự án
+├── next.config.ts        # Cấu hình Next.js
+├── eslint.config.mjs     # Cấu hình ESLint
+├── tsconfig.json         # Cấu hình TypeScript
+├── package.json          # Dependencies và scripts
+├── package-lock.json     # Khóa phiên bản dependencies
+├── AGENTS.md             # Quy tắc làm việc với Next.js trong repository
+└── .gitignore
+```
 
-| Thư mục | Mục đích dự kiến |
-|---|---|
-| `frontend/` | Next.js application |
-| `backend/` | NestJS application |
-| `docs/` | Tài liệu phân tích và thiết kế hệ thống |
-
-Đây là cấu trúc đề xuất, không phải cấu trúc đã được xác minh từ source code.
-
-TBD — Repository thực tế có sử dụng cấu trúc `frontend/`, `backend/`, `docs/` hay tổ chức theo mô hình khác?
+`ARCHITECTURE.md` có đề xuất tách `frontend/` và `backend/` trong tương lai, nhưng cấu trúc đó **chưa tồn tại** trong work tree. Khi thêm thư mục dùng chung như `components/`, `lib/` hoặc `constants/`, chỉ tạo khi thực sự có nhu cầu và cập nhật lại tài liệu.
 
 ## 8. Kiểm thử
 
-Hiện chưa có source code hoặc test configuration để xác nhận framework và lệnh chạy tests.
+Repository hiện **chưa cấu hình test framework** và chưa có script `test`. Các kiểm tra hiện có:
 
-TBD — Dự án sử dụng công cụ nào để chạy Unit Tests, Integration Tests và API Tests?
+```bash
+npm run lint
+npx tsc --noEmit
+npm run build
+```
 
-TBD — Lệnh chính xác để chạy toàn bộ test suite là gì?
+Với thay đổi giao diện, kiểm tra thủ công các luồng bị ảnh hưởng và ghi rõ trong Pull Request. Khi bổ sung test framework, cập nhật lệnh chạy test vào README và `CONTRIBUTING.md`.
 
 ## 9. License
 
-TBD — Dự án sử dụng License nào (MIT, Apache-2.0, GPL-3.0 hoặc Proprietary)?
+Repository chưa có file `LICENSE`. Loại license (MIT, Apache-2.0, GPL-3.0 hoặc Proprietary): TBD.
 
 ## 10. Tài liệu liên quan
 
-- `AN_JEWELRY_SAD_v1.1.docx` — Tài liệu System Analysis and Design.
-- `ARCHITECTURE.md` — Tài liệu kiến trúc hệ thống đề xuất.
+- `docs/REQUIREMENTS.md` — Đặc tả yêu cầu hệ thống.
+- `docs/ARCHITECTURE.md` — Kiến trúc hệ thống đề xuất.
+- `docs/CONTRIBUTING.md` — Quy trình làm việc, code, commit và Pull Request.
+- `docs/AI_LOGS.md` — Nhật ký thay đổi do AI thực hiện.
+- `AN_JEWELRY_SAD_v1.1.docx` — Tài liệu nguồn System Analysis and Design (không có trong work tree hiện tại).
 
 `ARCHITECTURE.md` được xây dựng dựa trên SAD v1.1. Những công nghệ và thiết kế chưa được xác nhận trong tài liệu kiến trúc không được xem là implementation đã hoàn thành.
