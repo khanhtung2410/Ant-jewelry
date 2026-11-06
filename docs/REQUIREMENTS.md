@@ -656,7 +656,7 @@ Tài liệu có **30 yêu cầu chức năng** chia thành 7 module. Mã FR bị
 | Ưu tiên | High |
 | Trạng thái | TBC |
 | Hiện trạng triển khai | Chưa xác minh |
-| Liên quan | SAD: FR-USER-001; UC-10; API-A01; NFR-007, N; BR-017; OI-021 (JWT chỉ là đề xuất) |
+| Liên quan | SAD: FR-USER-001; UC-10; API-A01; NFR-007, NFR-012; BR-017; OI-021 (JWT chỉ là đề xuất) |
  
 #### FR-034 – Đăng xuất
  
@@ -686,7 +686,7 @@ Tài liệu có **30 yêu cầu chức năng** chia thành 7 module. Mã FR bị
 | Ưu tiên | Medium |
 | Trạng thái | TBC |
 | Hiện trạng triển khai | Chưa xác minh |
-| Liên quan | SAD: FR-USER-003; UC-19; API-A25, API-A26, API-A27; Dữ liệu: User/Role (chưa có cấu trúc), staff (A.5: chỉ có `staff_id`, `name`, `is_delete`); N; OI-021 |
+| Liên quan | SAD: FR-USER-003; UC-19; API-A25, API-A26, API-A27; Dữ liệu: User/Role (chưa có cấu trúc), staff (A.5: chỉ có `staff_id`, `name`, `is_delete`); NFR-012; OI-021 |
  
 #### FR-036 – Phân quyền và kiểm soát truy cập
  
