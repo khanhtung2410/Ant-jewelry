@@ -52,7 +52,7 @@ Theo phạm vi do chủ dự án làm rõ (SAD mục 1.1, 2.2.2), website **khô
 |---|---|---|---|
 | OBJ-01 | Cho phép khách hàng xem danh sách, danh mục, chi tiết sản phẩm và sắp xếp theo giá hoặc tên | AC-004 đến AC-010 | Đã quan sát |
 | OBJ-02 | Cung cấp nội dung Blog để khách hàng tìm hiểu thông tin liên quan đến trang sức | AC-011, AC-012 | Đã quan sát |
-| OBJ-03 | Hỗ trợ Admin/Staff quản lý sản phẩm, danh mục, Blog và tài khoản nội bộ | AC-023 đến AC-037 | Đã xác định ở mức nhóm chức năng; thao tác chi tiết TBC |
+| OBJ-03 | Hỗ trợ Admin/Staff quản lý sản phẩm, danh mục, Blog và tài khoản nội bộ | AC-023 đến AC-036 | Đã xác định ở mức nhóm chức năng; thao tác chi tiết TBC |
 | OBJ-04 | Làm cơ sở cho phát triển, kiểm thử và nghiệm thu hệ thống | Toàn bộ mục 11 và 12 | Đề xuất |
  
 ### 1.3. Phạm vi dự án
@@ -63,10 +63,9 @@ Phạm vi được phân loại theo mức độ xác nhận của SAD (mục 2.
 |---|---|
 | **Trong phạm vi – Đã quan sát trên website công khai** | Trang chủ; danh sách sản phẩm; xem sản phẩm theo danh mục; sắp xếp theo giá và tên; chi tiết sản phẩm (hình ảnh, thông tin, thông số); danh sách và chi tiết Blog; số điện thoại và liên kết Facebook, Instagram; điều hướng giữa các trang |
 | **Trong phạm vi – Đã xác định (chủ dự án xác nhận ở mức nhóm chức năng)** | Quản trị sản phẩm và Blog; vai trò Admin và Staff |
-| **Trong phạm vi có điều kiện** | Báo cáo/thống kê quản trị – chỉ khi đơn vị vận hành chấp thuận (OI-007) |
-| **Ngoài phạm vi** | Giỏ hàng; đặt hàng trực tuyến; thanh toán trực tuyến; giao dịch trực tuyến; sản phẩm thiết kế/sản xuất theo yêu cầu riêng; báo cáo doanh thu, đơn hàng, thanh toán |
+| **Ngoài phạm vi** | Giỏ hàng; đặt hàng trực tuyến; thanh toán trực tuyến; giao dịch trực tuyến; sản phẩm thiết kế/sản xuất theo yêu cầu riêng |
 | **Đề xuất mở rộng (không bắt buộc ở phiên bản hiện tại)** | Quản lý tồn kho; khuyến mãi; bảo hành; vận chuyển; chăm sóc khách hàng |
-| **TBC** | Phạm vi báo cáo; ma trận quyền Admin/Staff; hành vi nút "ORDER NOW" trên website hiện tại (OI-031) |
+| **TBC** | Ma trận quyền Admin/Staff; hành vi nút "ORDER NOW" trên website hiện tại (OI-031) |
  
 Nguyên tắc: không đưa giỏ hàng, đặt hàng, thanh toán, giao dịch trực tuyến hoặc thiết kế riêng trở lại phạm vi nếu chưa có thay đổi yêu cầu chính thức từ chủ dự án (SAD, Ghi chú cuối).
  
@@ -160,7 +159,7 @@ Quy mô dữ liệu và lưu lượng truy cập chưa có số liệu khảo s�
 Hệ thống gồm hai phân hệ:
  
 - **Phân hệ công khai (Customer):** Trang chủ, danh sách và chi tiết sản phẩm, Blog, số điện thoại và liên kết Facebook, Instagram để liên hệ trực tiếp. Không yêu cầu đăng nhập.
-- **Phân hệ quản trị (Admin, Staff) – dự kiến:** Đăng nhập, quản lý sản phẩm, danh mục, hình ảnh, giá, Blog, quản lý tài khoản và phân quyền, báo cáo (có điều kiện). Phân hệ này chưa được xác minh trên thực tế và các thao tác chi tiết ở trạng thái TBC.
+- **Phân hệ quản trị (Admin, Staff) – dự kiến:** Đăng nhập, quản lý sản phẩm, danh mục, hình ảnh, giá, Blog, quản lý tài khoản và phân quyền. Phân hệ này chưa được xác minh trên thực tế và các thao tác chi tiết ở trạng thái TBC.
 ```mermaid
 flowchart LR
     C["Customer<br/>(khách truy cập)"]
@@ -203,8 +202,7 @@ flowchart LR
 | MOD-06 | Quản trị sản phẩm | CRUD sản phẩm; danh mục; hình ảnh; giá; trạng thái hiển thị | FR-020 đến FR-027 | Chưa xác minh |
 | MOD-07 | Quản trị Blog | CRUD bài viết; hình ảnh; trạng thái | FR-028 đến FR-032 | Chưa xác minh |
 | MOD-08 | Người dùng và phân quyền | Đăng nhập/đăng xuất; quản lý tài khoản; phân quyền | FR-033 đến FR-036 | Chưa xác minh |
-| MOD-09 | Báo cáo (có điều kiện) | Thống kê sản phẩm và bài viết | FR-037, FR-038 | Chưa xác minh; chỉ áp dụng nếu OI-007 xác nhận |
- 
+
 ### 2.5. Chức năng quan sát trên website nhưng chưa có trong SAD
  
 Qua đối chiếu ngày 05/11/2026, các nội dung sau xuất hiện trên website nhưng **không** có yêu cầu tương ứng trong SAD. Tài liệu **không** biến chúng thành yêu cầu chính thức; chúng được ghi nhận để xác nhận phạm vi.
@@ -239,7 +237,7 @@ SAD xác định **3 actor**: Customer, Admin, Staff. **SAD không có vai trò 
 | Actor | Mô tả | Trách nhiệm | Phạm vi quyền (theo SAD) | Trạng thái |
 |---|---|---|---|---|
 | **Customer** | Người truy cập website để xem thông tin sản phẩm và liên hệ trực tiếp | Xem sản phẩm, danh mục, Blog, số điện thoại và liên kết Facebook, Instagram | Truy cập công khai, không cần tài khoản. Không tạo đơn hàng, không thanh toán | Đã xác định |
-| **Admin** | Quản trị viên, quản lý và kiểm soát hoạt động hệ thống | Quản lý sản phẩm, danh mục, Blog và người dùng; xem báo cáo nếu nằm trong phạm vi | Quyền chi tiết (nhân viên, phân quyền, cấu hình hệ thống) chưa xác nhận | Vai trò đã xác định; quyền chi tiết TBC (OI-004) |
+| **Admin** | Quản trị viên, quản lý và kiểm soát hoạt động hệ thống | Quản lý sản phẩm, danh mục, Blog và người dùng | Quyền chi tiết (nhân viên, phân quyền, cấu hình hệ thống) chưa xác nhận | Vai trò đã xác định; quyền chi tiết TBC (OI-004) |
 | **Staff** | Nhân viên tham gia vận hành và hỗ trợ website | Hỗ trợ vận hành website; kiểm tra thông tin sản phẩm; cập nhật sản phẩm hoặc bài viết theo quyền được cấp | "Theo quyền được cấp"; không mặc định có cùng quyền với Admin | Vai trò đã xác định; quyền chi tiết TBC (OI-004) |
  
 ### 3.3. Ma trận quyền (đề xuất, TBC)
@@ -255,18 +253,17 @@ SAD chưa có ma trận quyền (OI-004). Bảng dưới chỉ tổng hợp nh�
 | Quản lý danh mục | Không | Có (TBC) | TBC | FR-027 |
 | Quản lý Blog | Không | Có (TBC) | Theo quyền (TBC) | FR-028 đến FR-032 |
 | Quản lý tài khoản nội bộ, phân quyền | Không | Có (TBC) | Không (TBC) | FR-035, FR-036 |
-| Xem báo cáo | Không | Có, nếu OI-007 xác nhận | TBC | FR-037, FR-038 |
- 
+
 ---
 ## 4. Yêu cầu chức năng
  
-Tài liệu có **30 yêu cầu chức năng** chia thành 7 module. Mã FR bị loại khỏi phạm vi cập nhật được giữ nguyên vị trí không sử dụng để duy trì khả năng truy vết với tài liệu nguồn. Mỗi yêu cầu gồm: mô tả, actor, tiền điều kiện, luồng chính, luồng thay thế, hậu điều kiện, mức ưu tiên (do BA đề xuất), trạng thái và hiện trạng triển khai.
+Tài liệu có **28 yêu cầu chức năng** chia thành 6 module. Mã FR bị loại khỏi phạm vi cập nhật được giữ nguyên vị trí không sử dụng để duy trì khả năng truy vết với tài liệu nguồn. Mỗi yêu cầu gồm: mô tả, actor, tiền điều kiện, luồng chính, luồng thay thế, hậu điều kiện, mức ưu tiên (do BA đề xuất), trạng thái và hiện trạng triển khai.
  
 **Cách đọc:**
  
 - Luồng chính và luồng thay thế của phân hệ công khai dựa trên quan sát website và đặc tả UC của SAD. Với phân hệ quản trị, luồng được suy ra từ UC của SAD và **chưa được xác minh trên hệ thống thực**.
 - Chi tiết chưa có căn cứ được ghi "**TBC**" kèm mã OI (Phụ lục A); không được hiểu là yêu cầu đã chốt.
-- SAD có 44 mã yêu cầu chức năng. Sáu cặp yêu cầu trùng hoặc chồng lấn được hợp nhất; thêm yêu cầu điều hướng FR-002. Tổng số yêu cầu chức năng còn 30; mã các yêu cầu còn lại được giữ nguyên để duy trì truy vết.
+- SAD có 44 mã yêu cầu chức năng. Sáu cặp yêu cầu trùng hoặc chồng lấn được hợp nhất; thêm yêu cầu điều hướng FR-002. Tổng số yêu cầu chức năng còn 28; mã các yêu cầu còn lại được giữ nguyên để duy trì truy vết.
 ### 4.1. MOD-01 – Trang công khai
  
 #### FR-001 – Xem trang chủ
@@ -703,40 +700,6 @@ Tài liệu có **30 yêu cầu chức năng** chia thành 7 module. Mã FR bị
 | Hiện trạng triển khai | Chưa xác minh |
 | Liên quan | SAD: FR-USER-004, FR-USER-005; UC-20; API-A28; BR-008, BR-018; NFR-008; OI-004 |
  
-### 4.9. MOD-09 – Báo cáo (có điều kiện)
- 
-> **Lưu ý chung cho MOD-09:** chỉ triển khai nếu đơn vị vận hành xác nhận có báo cáo (OI-007). Báo cáo doanh thu, đơn hàng và thanh toán **không** thuộc phạm vi vì website không hỗ trợ giao dịch trực tuyến (BR-016). Toàn bộ yêu cầu ở trạng thái Đề xuất.
- 
-#### FR-037 – Thống kê sản phẩm
- 
-| Thuộc tính | Nội dung |
-|---|---|
-| Mô tả | Admin xem số lượng sản phẩm theo danh mục hoặc theo loại sản phẩm. |
-| Actor | Admin |
-| Tiền điều kiện | Đã đăng nhập với quyền xem báo cáo; OI-007 xác nhận có báo cáo. |
-| Luồng chính | 1. Admin mở mục báo cáo sản phẩm.<br>2. Hệ thống hiển thị số lượng sản phẩm (không tính sản phẩm đã xóa mềm) theo danh mục hoặc loại. |
-| Luồng thay thế | 2a. Không có dữ liệu: hiển thị số lượng bằng 0.<br>Không đủ quyền: HTTP 403. |
-| Hậu điều kiện | Báo cáo được hiển thị. Dữ liệu hệ thống không thay đổi. |
-| Ưu tiên | Low |
-| Trạng thái | Đề xuất |
-| Hiện trạng triển khai | Chưa xác minh |
-| Liên quan | SAD: FR-REP-001; UC-21; API-A29; OI-007, OI-009 |
- 
-#### FR-038 – Thống kê bài viết
- 
-| Thuộc tính | Nội dung |
-|---|---|
-| Mô tả | Admin xem số lượng bài viết trong hệ thống. |
-| Actor | Admin |
-| Tiền điều kiện | Như FR-037. |
-| Luồng chính | 1. Admin mở mục báo cáo bài viết.<br>2. Hệ thống hiển thị số lượng bài viết (phân theo trạng thái nếu OI-024 được xác nhận). |
-| Luồng thay thế | Như FR-037. |
-| Hậu điều kiện | Báo cáo được hiển thị. Dữ liệu hệ thống không thay đổi. |
-| Ưu tiên | Low |
-| Trạng thái | Đề xuất |
-| Hiện trạng triển khai | Chưa xác minh |
-| Liên quan | SAD: FR-REP-002; UC-21; API-A30; OI-007, OI-024 |
- 
 ## 5. Yêu cầu phi chức năng
  
 Tài liệu có **22 yêu cầu phi chức năng** thuộc 8 nhóm: tương thích, hiệu năng, bảo mật, khả năng sử dụng, độ tin cậy, tính sẵn sàng, khả năng mở rộng, khả năng bảo trì. Các mã NFR không được đánh lại để giữ truy vết với tài liệu nguồn.
@@ -802,14 +765,14 @@ Tài liệu có **22 yêu cầu phi chức năng** thuộc 8 nhóm: tương thí
  
 | ID | Tên | Mô tả và tiêu chí đo | Mã SAD | Trạng thái | Ưu tiên |
 |---|---|---|---|---|---|
-| NFR-025 | Cấu trúc mã nguồn | Mã nguồn được chia theo module chức năng (tương ứng MOD-01 đến MOD-09), tách lớp giao diện, nghiệp vụ và truy cập dữ liệu; công cụ kiểm tra mã (linter) không báo lỗi mức nghiêm trọng khi build. | NFR-015 | Đề xuất | Medium |
+| NFR-025 | Cấu trúc mã nguồn | Mã nguồn được chia theo module chức năng (tương ứng MOD-01 đến MOD-08), tách lớp giao diện, nghiệp vụ và truy cập dữ liệu; công cụ kiểm tra mã (linter) không báo lỗi mức nghiêm trọng khi build. | NFR-015 | Đề xuất | Medium |
 | NFR-026 | Khả năng bảo trì | Tài liệu API được cập nhật cùng mã nguồn; thay đổi cấu trúc dữ liệu thực hiện qua migration có quản lý phiên bản; logic nghiệp vụ chính có kiểm thử tự động, độ phủ mục tiêu đề xuất ≥ 70% cho lớp nghiệp vụ. | NFR-016 | Đề xuất; TBC | Medium |
  
 ---
  
 ## 6. Quy tắc nghiệp vụ
  
-Quy tắc nghiệp vụ còn hiệu lực gồm 7 quy tắc từ SAD và 9 quy tắc **bổ sung**. Các mã đã loại khỏi phạm vi cập nhật không được đánh lại để duy trì truy vết với tài liệu nguồn.
+Quy tắc nghiệp vụ còn hiệu lực gồm 6 quy tắc từ SAD và 9 quy tắc **bổ sung**. Các mã đã loại khỏi phạm vi cập nhật không được đánh lại để duy trì truy vết với tài liệu nguồn.
  
 ### 6.1. Ràng buộc và chính sách nghiệp vụ
  
@@ -819,14 +782,13 @@ Quy tắc nghiệp vụ còn hiệu lực gồm 7 quy tắc từ SAD và 9 quy t
 | BR-003 | Không đặt hàng trực tuyến | Hệ thống không cung cấp chức năng tạo đơn hàng trực tuyến. Hành vi nút "ORDER NOW" trên website hiện tại cần được đối chiếu trước khi xác định cách xử lý (OI-031). | SAD 3.2, 3.1.4 | Đã xác định; đối chiếu TBC | FR-007 |
 | BR-004 | Không thanh toán trực tuyến | Hệ thống không tích hợp quy trình thanh toán hoặc ghi nhận giao dịch trực tuyến trong phạm vi hiện tại. | SAD 3.2 | Đã xác định | Toàn bộ |
 | BR-005 | Không thiết kế riêng | Hệ thống không tiếp nhận đặt thiết kế hoặc sản xuất trang sức theo yêu cầu riêng. | SAD 3.2 | Đã xác định | Toàn bộ |
-| BR-006 | Phân loại sản phẩm | Product Type (loại trang sức, ví dụ Ring, Necklace) và Product Category (danh mục kinh doanh, ví dụ Wedding Bands, Engagement, Everyday) là hai khái niệm cần phân biệt; không gộp thành một trường nếu nghiệp vụ cần quản lý độc lập. | SAD 3.2, 2.3, B.2 | Định hướng mô hình hóa; TBC (OI-009) | FR-005, FR-007, FR-022, FR-027, FR-037 |
+| BR-006 | Phân loại sản phẩm | Product Type (loại trang sức, ví dụ Ring, Necklace) và Product Category (danh mục kinh doanh, ví dụ Wedding Bands, Engagement, Everyday) là hai khái niệm cần phân biệt; không gộp thành một trường nếu nghiệp vụ cần quản lý độc lập. | SAD 3.2, 2.3, B.2 | Định hướng mô hình hóa; TBC (OI-009) | FR-005, FR-007, FR-022, FR-027 |
 | BR-007 | Quản lý nội dung | Sản phẩm và bài viết được quản lý bởi tài khoản nội bộ có quyền phù hợp. | SAD 3.2 | Định hướng; TBC (OI-005, OI-006) | FR-020 đến FR-032 |
 | BR-008 | Phân quyền | Admin và Staff được phân quyền theo trách nhiệm do đơn vị vận hành xác nhận. | SAD 3.2 | TBC (OI-004) | FR-020 đến FR-036 |
 | BR-010 | Chỉ hiển thị nội dung công khai | Website công khai không hiển thị bản ghi đã xóa mềm (`is_delete = true`) hoặc đã được ẩn. Tiêu chí "được công khai" của bài viết: TBC. | SAD 7.1, FR-BLOG-007 | Đề xuất; TBC (OI-005, OI-006, OI-024) | FR-004, FR-005, FR-007, FR-010, FR-011, FR-024, FR-031 |
 | BR-011 | Ảnh đại diện | Ảnh hiển thị trong danh sách sản phẩm là ảnh được đánh dấu `front_image = true`. Số lượng ảnh đại diện tối đa mỗi sản phẩm và thứ tự các ảnh còn lại: TBC. | SAD A.3, API-P01 | Đề xuất; TBC (OI-018) | FR-008, FR-025 |
 | BR-012 | Cơ sở sắp xếp theo giá | Sắp xếp theo giá dùng giá hiện hành của sản phẩm. Định nghĩa "giá hiện hành", trường số tiền và đơn vị tiền tệ: TBC. | SAD FR-CUS-004, A.2 | Đề xuất; TBC (OI-008, OI-015, OI-016) | FR-006, FR-026 |
 | BR-013 | Cơ sở sắp xếp theo tên | Sắp xếp theo tên theo thứ tự bảng chữ cái tăng (A–Z) hoặc giảm (Z–A). Cách xử lý tiếng Việt có dấu và phân biệt hoa/thường: TBC. | SAD FR-CUS-005 | Đề xuất; TBC | FR-006 |
-| BR-016 | Không báo cáo giao dịch | Báo cáo doanh thu, đơn hàng và thanh toán không thuộc phạm vi vì website không hỗ trợ giao dịch trực tuyến. | SAD 3.1.6 | Đã xác định | FR-037, FR-038 |
 | BR-017 | Xác thực trước khi quản trị | Chỉ tài khoản nội bộ đã xác thực mới được vào khu vực quản trị. | SAD NFR-007 | Đề xuất | FR-033, NFR-007 |
 | BR-018 | Không mặc định cùng quyền | Admin và Staff không được mặc định có cùng quyền; ma trận quyền xây dựng sau khi xác định trách nhiệm từng vai trò. | SAD 3.1.5 | Đã xác định (nguyên tắc) | FR-036 |
 | BR-019 | Chức năng mở rộng không bắt buộc | Quản lý tồn kho, khuyến mãi, bảo hành, vận chuyển, chăm sóc khách hàng không thuộc phạm vi bắt buộc của phiên bản hiện tại. | SAD 2.2.3 | Đã xác định | Toàn bộ |
@@ -844,7 +806,6 @@ Hệ thống **không có phép tính tài chính** (BR-020). Các phép tính d
 |---|---|---|---|
 | Sắp xếp theo giá | Thứ tự tăng/giảm theo giá hiện hành (BR-012) | FR-006 | Đã quan sát; cơ sở dữ liệu giá TBC |
 | Sắp xếp theo tên | Thứ tự bảng chữ cái (BR-013) | FR-006 | Đã quan sát |
-| Đếm thống kê | Số lượng sản phẩm và bài viết (loại trừ bản ghi xóa mềm) | FR-037, FR-038 | Đề xuất; có điều kiện (OI-007) |
  
 ### 6.4. Chính sách lưu giữ dữ liệu
  
@@ -853,9 +814,9 @@ SAD chưa xác định chính sách lưu giữ dữ liệu sản phẩm, hình �
 ---
 ## 7. Đặc tả Use Case
  
-Tài liệu còn 17 use case; các mã và tên còn lại được giữ nguyên theo SAD để duy trì truy vết. UC-03 và UC-04 được gộp trong UC-02. Các use case chưa có đặc tả gốc gồm UC-01, UC-06, UC-08, UC-12, UC-13, UC-14 và UC-21; phần mô tả tương ứng là sơ bộ.
- 
-**Quan hệ giữa các UC (theo sơ đồ SAD):** UC-03 và UC-04 mở rộng (`extend`) UC-02; UC-11 bao gồm (`include`) UC-13 và UC-14. Các UC quản trị (UC-10 đến UC-21) **chưa thể chốt** cho đến khi OI-004 và OI-005 được xác nhận.
+Tài liệu còn 16 use case; các mã và tên còn lại được giữ nguyên theo SAD để duy trì truy vết. UC-03 và UC-04 được gộp trong UC-02. Các use case chưa có đặc tả gốc gồm UC-01, UC-06, UC-08, UC-12, UC-13 và UC-14; phần mô tả tương ứng là sơ bộ.
+
+**Quan hệ giữa các UC (theo sơ đồ SAD):** UC-03 và UC-04 mở rộng (`extend`) UC-02; UC-11 bao gồm (`include`) UC-13 và UC-14. Các UC quản trị (UC-10 đến UC-20) **chưa thể chốt** cho đến khi OI-004 và OI-005 được xác nhận.
  
 ### 7.1. Danh sách use case
  
@@ -877,7 +838,6 @@ Tài liệu còn 17 use case; các mã và tên còn lại được giữ nguyê
 | UC-15 | Quản lý bài viết Blog | Admin; Staff theo quyền | FR-028 đến FR-032 | TBC | Có |
 | UC-19 | Quản lý tài khoản nội bộ | Admin | FR-035 | TBC | Có (gộp UC-19, UC-20) |
 | UC-20 | Phân quyền truy cập | Admin | FR-036 | Vai trò đã xác định; quyền chi tiết TBC | Có (gộp UC-19, UC-20) |
-| UC-21 | Xem báo cáo thống kê | Admin | FR-037, FR-038 | Đề xuất (chỉ khi OI-007 xác nhận) | Chưa có (Sơ bộ) |
  
 ### 7.2. Use case phân hệ công khai (Customer)
  
@@ -1055,18 +1015,7 @@ Tài liệu còn 17 use case; các mã và tên còn lại được giữ nguyê
 | Alternative Flows | 1a. Người dùng không phải Admin: từ chối truy cập. |
 | Postconditions | Quyền được cập nhật và có hiệu lực cho các phiên làm việc sau đó (thời điểm hiệu lực cho phiên đang mở: TBC). |
 | Điểm TBC | Ma trận quyền Admin/Staff (OI-004). |
- 
-#### UC-21 – Xem báo cáo thống kê *(Sơ bộ)*
- 
-| Thuộc tính | Nội dung |
-|---|---|
-| Primary Actor | Admin |
-| Điều kiện tiên quyết | Đã đăng nhập; có quyền xem báo cáo; OI-007 xác nhận có báo cáo. |
-| Main Success Scenario | 1. Admin chọn loại báo cáo (sản phẩm hoặc bài viết).<br>2. Hệ thống hiển thị số liệu thống kê tương ứng (FR-037, FR-038). |
-| Alternative Flows | 2a. Không có dữ liệu: hiển thị số lượng bằng 0.<br>1a. Không có quyền: từ chối truy cập. |
-| Postconditions | Báo cáo được hiển thị; dữ liệu hệ thống không thay đổi. |
-| Điểm TBC | Có triển khai Reporting hay không (OI-007); cách phân loại số liệu sản phẩm và bài viết cần xác nhận. |
- 
+
 ---
 ## 8. Yêu cầu dữ liệu
  
@@ -1077,11 +1026,11 @@ Phần này tổng hợp mô hình dữ liệu **logic** từ SAD (Phụ lục A
 | Thực thể | Bảng/nhóm dữ liệu trong SAD | Mô tả | Module sử dụng | Trạng thái |
 |---|---|---|---|---|
 | Product (Sản phẩm) | `product_detail` | Thông tin định danh và mô tả cơ bản của sản phẩm | MOD-02, MOD-06 | Theo cấu trúc rà soát; một số trường TBC |
-| Product Type (Loại sản phẩm) | `product_type` | Loại trang sức (Ring, Necklace…) | MOD-02, MOD-06, MOD-09 | Theo cấu trúc rà soát; chưa có yêu cầu quản trị riêng |
+| Product Type (Loại sản phẩm) | `product_type` | Loại trang sức (Ring, Necklace…) | MOD-02, MOD-06 | Theo cấu trúc rà soát; chưa có yêu cầu quản trị riêng |
 | Product Price (Giá sản phẩm) | `product_price` | Thông tin giá của sản phẩm | MOD-02, MOD-06 | Theo cấu trúc rà soát; TBC (OI-008, OI-015, OI-016) |
 | Product Image (Hình ảnh sản phẩm) | `product_images` | Hình ảnh của sản phẩm | MOD-02, MOD-06 | Theo cấu trúc rà soát; TBC (OI-018) |
-| Category (Danh mục) | Chưa có cấu trúc | Danh mục kinh doanh | MOD-02, MOD-06, MOD-09 | TBC (OI-009) |
-| Blog | `blog` | Bài viết giới thiệu, chia sẻ | MOD-03, MOD-07, MOD-09 | Cấu trúc cần xem xét; TBC (OI-024) |
+| Category (Danh mục) | Chưa có cấu trúc | Danh mục kinh doanh | MOD-02, MOD-06 | TBC (OI-009) |
+| Blog | `blog` | Bài viết giới thiệu, chia sẻ | MOD-03, MOD-07 | Cấu trúc cần xem xét; TBC (OI-024) |
 | Staff (Nhân viên) | `staff` | Thông tin nhân viên | MOD-08 | Theo cấu trúc rà soát; TBC (OI-021) |
 | User / Role (Tài khoản, vai trò) | Chưa có cấu trúc | Tài khoản Admin/Staff và phân quyền | MOD-08 | TBC (OI-004, OI-021) |
  
@@ -1260,8 +1209,7 @@ SAD **chưa có UI Specification**. Bảng dưới liệt kê các trang công k
 | Quản trị sản phẩm, danh mục, hình ảnh, giá | TBC | Danh sách; biểu mẫu thêm/sửa; xác nhận xóa/ẩn; tải ảnh | FR-020 đến FR-027 | Dự kiến; TBC |
 | Quản trị Blog | TBC | Danh sách; biểu mẫu thêm/sửa; trạng thái | FR-028 đến FR-032 | Dự kiến; TBC |
 | Quản lý tài khoản và phân quyền | TBC | Danh sách tài khoản; thiết lập quyền | FR-035, FR-036 | Dự kiến; TBC |
-| Báo cáo | TBC | Bảng/biểu đồ thống kê số lượng | FR-037, FR-038 | Đề xuất; có điều kiện |
- 
+
 **Yêu cầu chung cho giao diện:** responsive (NFR-001); tương thích trình duyệt (NFR-002); nhất quán (NFR-003); điều hướng rõ ràng (NFR-015); ảnh có alt text (NFR-018). Ngôn ngữ giao diện: TBC (OI-029).
  
 ### 9.2. Giao diện phần mềm (thành phần và công nghệ)
@@ -1301,7 +1249,7 @@ Toàn bộ đặc tả API trong SAD Chương 7 là **đề xuất**; không có
  
 Trang chủ (UC-01) và thông tin liên hệ (UC-08): chưa xác định nội dung là tĩnh trên Frontend hay lấy từ API (OI-026).
  
-**API quản trị (27 endpoint, yêu cầu xác thực và kiểm tra quyền – NFR-007, NFR-008).** Chưa đặc tả request/response chi tiết vì phụ thuộc OI-004, OI-005, OI-006, OI-007, OI-008 và OI-021.
+**API quản trị (25 endpoint, yêu cầu xác thực và kiểm tra quyền – NFR-007, NFR-008).** Chưa đặc tả request/response chi tiết vì phụ thuộc OI-004, OI-005, OI-006, OI-008 và OI-021.
  
 | Nhóm | ID | Endpoint (Method đường dẫn) | Yêu cầu | Trạng thái |
 |---|---|---|---|---|
@@ -1312,8 +1260,7 @@ Trang chủ (UC-01) và thông tin liên hệ (UC-08): chưa xác định nội 
 | Danh mục | API-A13 đến A16 | GET, POST `/api/admin/categories`; PATCH, DELETE `…/categories/{category_id}` | FR-027 | TBC (OI-009) |
 | Blog | API-A17 đến A21 | GET, POST `/api/admin/blogs`; PATCH, DELETE `…/blogs/{blog_id}`; PATCH `…/{blog_id}/status` | FR-028 đến FR-032 | TBC; A21: Đề xuất |
 | Tài khoản và quyền | API-A25 đến A28 | GET, POST `/api/admin/users`; PATCH `…/users/{user_id}`; GET `/api/admin/roles` | FR-035, FR-036 | TBC (OI-004, OI-021) |
-| Báo cáo | API-A29 đến A30 | GET `/api/admin/reports/products`; `…/blogs` | FR-037, FR-038 | Đề xuất (OI-007) |
- 
+
 Không có endpoint cho giỏ hàng, đặt hàng, thanh toán hoặc thiết kế riêng (BR-003 đến BR-005).
  
 ### 9.4. Dịch vụ bên ngoài và tích hợp
@@ -1347,7 +1294,6 @@ Không có endpoint cho giỏ hàng, đặt hàng, thanh toán hoặc thiết k�
 | BC-02 | Không có chức năng đặt thiết kế hoặc sản xuất theo yêu cầu riêng | BR-005 |
 | BC-03 | Khách hàng xem thông tin và liên hệ trực tiếp với AN JEWELRY qua số điện thoại hoặc liên kết Facebook, Instagram | BR-001, FR-003 |
 | BC-04 | Vai trò nội bộ giới hạn ở Admin và Staff; không mặc định cùng quyền | BR-008, BR-018 |
-| BC-05 | Báo cáo chỉ nằm trong phạm vi nếu đơn vị vận hành chấp thuận | OI-007 |
 | BC-06 | Các hạng mục "đề xuất mở rộng" không bắt buộc ở phiên bản hiện tại | BR-019 |
  
 ### 10.3. Giả định dự án
@@ -1383,7 +1329,7 @@ Không có endpoint cho giỏ hàng, đặt hàng, thanh toán hoặc thiết k�
  
 Tiêu chí nghiệm thu (AC) được viết ở dạng điều kiện **đo được và kiểm thử được**. Quy ước:
  
-- Mỗi AC tham chiếu tới yêu cầu (FR/NFR) mà nó kiểm tra. Toàn bộ 30 FR và 22 NFR đều có ít nhất một AC (xem ma trận mục 12).
+- Mỗi AC tham chiếu tới yêu cầu (FR/NFR) mà nó kiểm tra. Toàn bộ 28 FR và 22 NFR đều có ít nhất một AC (xem ma trận mục 12).
 - Cột "Phụ thuộc" nêu các OI phải được đóng trước khi AC trở thành điều kiện nghiệm thu chính thức. AC có phụ thuộc là **mức đề xuất** cho đến khi OI được xác nhận.
 - Môi trường nghiệm thu: môi trường kiểm thử có dữ liệu mẫu do đơn vị vận hành xác nhận, gồm tối thiểu: sản phẩm thuộc đủ các danh mục và loại, sản phẩm đã xóa mềm, bài viết công khai và bài viết ẩn, tài khoản Admin và Staff.
 - Phương pháp kiểm tra: KTTC = kiểm thử thủ công; KTTĐ = kiểm thử tự động (đầu cuối hoặc API); ĐO = đo bằng công cụ; RS = rà soát tài liệu/mã/dữ liệu.
@@ -1417,8 +1363,7 @@ Tiêu chí nghiệm thu (AC) được viết ở dạng điều kiện **đo đ�
 | AC-034 | FR-033, FR-034 | Đăng nhập đúng cấp phiên và vào được khu vực quản trị; đăng nhập sai nhận HTTP 401 và không cấp phiên; sau đăng xuất, dùng lại phiên cũ nhận HTTP 401 (100% lần thử); chính sách khóa/giới hạn thử lại hoạt động đúng như đã chốt. | KTTĐ | OI-021 |
 | AC-035 | FR-035 | Admin thêm, sửa, khóa tài khoản thành công; tài khoản bị khóa không đăng nhập được (100% lần thử); người không phải Admin nhận HTTP 403. | KTTĐ | OI-004, OI-021 |
 | AC-036 | FR-036 | Với mỗi ô (vai trò × chức năng) trong ma trận quyền đã chốt: được phép thì thao tác thành công; không được phép thì nhận HTTP 403 và dữ liệu không đổi; độ phủ kiểm thử 100% các ô của ma trận. | KTTĐ | OI-004 |
-| AC-037 | FR-037, FR-038 | Số liệu thống kê trùng khớp số đếm trực tiếp từ dữ liệu (sai lệch 0) và loại trừ bản ghi đã xóa mềm. Chỉ nghiệm thu nếu OI-007 xác nhận có báo cáo. | KTTĐ | OI-007, OI-009, OI-024 |
- 
+
 ### 11.2. Tiêu chí nghiệm thu phi chức năng
  
 | ID | Yêu cầu | Điều kiện nghiệm thu | Phương pháp | Phụ thuộc |
@@ -1441,7 +1386,7 @@ Tiêu chí nghiệm thu (AC) được viết ở dạng điều kiện **đo đ�
 | AC-057 | NFR-021 | Phục hồi thử từ bản sao lưu trong môi trường kiểm thử: dữ liệu khôi phục khớp 100% bản gốc; thời gian phục hồi ≤ RTO đã chốt; lịch sao lưu chạy 7 ngày liên tiếp không lỗi. | KTTC, RS | NFR-021 (RPO, RTO) |
 | AC-058 | NFR-022 | Giám sát liên tục 30 ngày sau triển khai: khả dụng của phân hệ công khai ≥ 99,5% (không tính bảo trì đã thông báo). | ĐO | NFR-022 (mục tiêu) |
 | AC-059 | NFR-023, NFR-024 | Với bộ dữ liệu 1.000 sản phẩm công khai, AC-042 vẫn đạt; chỉ tiêu tải và số người dùng đồng thời đã được chủ dự án phê duyệt trước khi kiểm thử. | ĐO | NFR-024 |
-| AC-060 | NFR-025, NFR-026 | Mã nguồn tổ chức theo module (MOD-01 đến MOD-09); công cụ kiểm tra mã báo 0 lỗi mức nghiêm trọng; tài liệu API khớp 100% endpoint đã triển khai; độ phủ kiểm thử lớp nghiệp vụ ≥ 70%; migration chạy thành công trên cơ sở dữ liệu trống. | RS, ĐO | OI-013 |
+| AC-060 | NFR-025, NFR-026 | Mã nguồn tổ chức theo module (MOD-01 đến MOD-08); công cụ kiểm tra mã báo 0 lỗi mức nghiêm trọng; tài liệu API khớp 100% endpoint đã triển khai; độ phủ kiểm thử lớp nghiệp vụ ≥ 70%; migration chạy thành công trên cơ sở dữ liệu trống. | RS, ĐO | OI-013 |
  
 ### 11.3. Tiêu chí nghiệm thu mức hệ thống
  
@@ -1487,9 +1432,7 @@ Tiêu chí nghiệm thu (AC) được viết ở dạng điều kiện **đo đ�
 | FR-034 | Đăng xuất | MOD-08 | UC-10 | FR-USER-002 | API-A02 | — | BR-017 | NFR-007 | AC-034 |
 | FR-035 | Quản lý tài khoản nội bộ | MOD-08 | UC-19 | FR-USER-003 | API-A25, A26, A27 | User/Role, staff | BR-008 | NFR-012 | AC-035 |
 | FR-036 | Phân quyền và kiểm soát truy cập | MOD-08 | UC-20 | FR-USER-004, FR-USER-005 | API-A28 | User/Role (chưa có) | BR-008, BR-018 | NFR-008 | AC-036 |
-| FR-037 | Thống kê sản phẩm | MOD-09 | UC-21 | FR-REP-001 | API-A29 | product_detail, product_type | BR-016 | — | AC-037 |
-| FR-038 | Thống kê bài viết | MOD-09 | UC-21 | FR-REP-002 | API-A30 | blog | BR-016 | — | AC-037 |
- 
+
 ### 12.2. Ma trận use case – yêu cầu chức năng – API – tiêu chí nghiệm thu
  
 | Use case | Tên | Yêu cầu chức năng | API | AC |
@@ -1510,13 +1453,12 @@ Tiêu chí nghiệm thu (AC) được viết ở dạng điều kiện **đo đ�
 | UC-15 | Quản lý bài viết Blog | FR-028 đến FR-032 | API-A17 đến A21 | AC-030 đến AC-033 |
 | UC-19 | Quản lý tài khoản nội bộ | FR-035 | API-A25 đến A27 | AC-035 |
 | UC-20 | Phân quyền truy cập | FR-036 | API-A28 | AC-036 |
-| UC-21 | Xem báo cáo thống kê | FR-037, FR-038 | API-A29, A30 | AC-037 |
- 
+
 ### 12.3. Ma trận yêu cầu phi chức năng
  
 | NFR | Nhóm | Tên | Module/yêu cầu chịu ảnh hưởng | AC |
 |---|---|---|---|---|
-| NFR-001 | Tương thích | Responsive | MOD-01 đến MOD-03 (công khai); MOD-06 đến MOD-09 (TBC) | AC-039 |
+| NFR-001 | Tương thích | Responsive | MOD-01 đến MOD-03 (công khai); MOD-06 đến MOD-08 (TBC) | AC-039 |
 | NFR-002 | Tương thích | Tương thích trình duyệt | MOD-01 đến MOD-03 | AC-040 |
 | NFR-003 | Tương thích | Giao diện nhất quán | MOD-01 đến MOD-03 | AC-041 |
 | NFR-004 | Hiệu năng | Thời gian tải trang | FR-001, FR-004 đến FR-007, FR-009 đến FR-011 | AC-042 |
@@ -1549,20 +1491,18 @@ Tiêu chí nghiệm thu (AC) được viết ở dạng điều kiện **đo đ�
 | MOD-06 Quản trị sản phẩm | FR-020 đến FR-027 (8) | UC-11 đến UC-14 | Chưa xác minh |
 | MOD-07 Quản trị Blog | FR-028 đến FR-032 (5) | UC-15 | Chưa xác minh |
 | MOD-08 Người dùng và phân quyền | FR-033 đến FR-036 (4) | UC-10, UC-19, UC-20 | Chưa xác minh |
-| MOD-09 Báo cáo | FR-037, FR-038 (2) | UC-21 | Chưa xác minh |
- 
+
 ---
  
 ## Phụ lục A – Danh sách vấn đề cần xác nhận (Open Issues)
  
-Danh sách giữ nguyên mã của các vấn đề cần xác nhận còn hiệu lực: 20 vấn đề từ SAD và 6 vấn đề bổ sung từ đối chiếu website. Một OI chỉ đóng khi có quyết định của người có thẩm quyền; không OI nào tự động trở thành yêu cầu đã phê duyệt.
+Danh sách giữ nguyên mã của các vấn đề cần xác nhận còn hiệu lực: 19 vấn đề từ SAD và 6 vấn đề bổ sung từ đối chiếu website. Một OI chỉ đóng khi có quyết định của người có thẩm quyền; không OI nào tự động trở thành yêu cầu đã phê duyệt.
  
 | ID | Nội dung cần xác nhận | Mức độ | Yêu cầu liên quan | Nguồn |
 |---|---|---|---|---|
-| OI-004 | Ma trận quyền Admin/Staff (kể cả nhu cầu có vai trò quản lý trung gian) | Cao | FR-036; UC-20; toàn bộ MOD-06 đến MOD-09 | SAD |
+| OI-004 | Ma trận quyền Admin/Staff (kể cả nhu cầu có vai trò quản lý trung gian) | Cao | FR-036; UC-20; toàn bộ MOD-06 đến MOD-08 | SAD |
 | OI-005 | Các thao tác quản trị sản phẩm được hỗ trợ; xóa mềm hay ẩn | Cao | FR-020 đến FR-024; UC-11 | SAD |
 | OI-006 | Các thao tác quản trị Blog và trạng thái xuất bản | Trung bình | FR-028 đến FR-032; UC-15 | SAD |
-| OI-007 | Có triển khai Reporting hay không | Trung bình | FR-037, FR-038; UC-21 | SAD |
 | OI-008 | Cấu trúc giá, đơn vị tiền và lịch sử thay đổi giá | Cao (đề xuất) | FR-026; UC-14 | SAD |
 | OI-009 | Quan hệ Product Type và Category | Cao (đề xuất) | FR-005, FR-027; UC-03, UC-12 | SAD |
 | OI-010 | Thông số bản nhẫn/đá áp dụng cho nhóm sản phẩm nào | Trung bình | FR-009; UC-05 | SAD |
@@ -1613,22 +1553,22 @@ Danh sách giữ nguyên mã của các vấn đề cần xác nhận còn hiệ
  
 | Hạng mục | Số lượng | Ghi chú |
 |---|---|---|
-| Yêu cầu chức năng (FR-001 đến FR-038; không liên tục) | **30** | 7 module; mã yêu cầu còn lại giữ nguyên để duy trì truy vết |
+| Yêu cầu chức năng (FR-001 đến FR-036; không liên tục) | **28** | 6 module; mã yêu cầu còn lại giữ nguyên để duy trì truy vết |
 | Yêu cầu phi chức năng (NFR-001 đến NFR-026; không liên tục) | **22** | 8 nhóm; 15 yêu cầu đối chiếu SAD, 7 yêu cầu bổ sung bởi BA |
-| Quy tắc nghiệp vụ (BR-001 đến BR-020; không liên tục) | 16 | 7 từ SAD, 9 bổ sung |
+| Quy tắc nghiệp vụ (BR-001 đến BR-020; không liên tục) | 15 | 6 từ SAD, 9 bổ sung |
 | Quy tắc kiểm tra dữ liệu (DV-001 đến DV-022; không liên tục) | 16 | Phần lớn Đề xuất hoặc TBC |
-| Use case (UC-01 đến UC-21; không liên tục) | 17 | 7 sơ bộ do BA suy ra |
-| Tiêu chí nghiệm thu (AC-001 đến AC-063; không liên tục) | 49 | 27 chức năng, 19 phi chức năng, 3 mức hệ thống |
-| Vấn đề cần xác nhận (OI-004 đến OI-032; không liên tục) | 26 | 20 từ SAD, 6 bổ sung |
-| API đề xuất | 33 | 6 công khai, 27 quản trị |
+| Use case (UC-01 đến UC-20; không liên tục) | 16 | 6 sơ bộ do BA suy ra |
+| Tiêu chí nghiệm thu (AC-001 đến AC-063; không liên tục) | 48 | 26 chức năng, 19 phi chức năng, 3 mức hệ thống |
+| Vấn đề cần xác nhận (OI-004 đến OI-032; không liên tục) | 25 | 19 từ SAD, 6 bổ sung |
+| API đề xuất | 31 | 6 công khai, 25 quản trị |
  
 **Phân bố yêu cầu chức năng**
  
 | Tiêu chí | Phân bố |
 |---|---|
-| Ưu tiên (do BA đề xuất) | High: 16; Medium: 12; Low: 2 |
-| Hiện trạng triển khai | Đã triển khai (quan sát công khai): 11 (FR-001 đến FR-011); Chưa xác minh: 19 |
-| Trạng thái yêu cầu | FR-001 đến FR-011 đã quan sát; yêu cầu quản trị và báo cáo giữ trạng thái theo từng yêu cầu (TBC/Đề xuất) |
+| Ưu tiên (do BA đề xuất) | High: 16; Medium: 12; Low: 0 |
+| Hiện trạng triển khai | Đã triển khai (quan sát công khai): 11 (FR-001 đến FR-011); Chưa xác minh: 17 |
+| Trạng thái yêu cầu | FR-001 đến FR-011 đã quan sát; yêu cầu quản trị giữ trạng thái theo từng yêu cầu (TBC/Đề xuất) |
  
 **Phân bố yêu cầu phi chức năng theo ưu tiên (đề xuất):** High: 7; Medium: 15.
  
