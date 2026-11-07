@@ -97,7 +97,6 @@ Trạng thái trong bảng phản ánh mức độ xác định của yêu cầu
 | Product Management | Quản lý sản phẩm | Admin / Staff | Quyền và thao tác cụ thể cần xác nhận |
 | Blog Management | Quản lý bài viết | Admin / Staff | Quyền và trạng thái xuất bản cần xác nhận |
 | User Management | Quản lý người dùng và quyền | Admin | Cấu trúc User/Role cần xác nhận |
-| Reporting | Thống kê, báo cáo | Admin | Chỉ triển khai nếu được xác nhận trong phạm vi |
 
 ---
 
@@ -132,7 +131,6 @@ Các nghiệp vụ dự kiến:
 - Quản lý danh mục.
 - Quản lý bài viết Blog.
 - Quản lý người dùng.
-- Xem báo cáo quản trị phù hợp với dữ liệu website nếu chức năng báo cáo nằm trong phạm vi dự án.
 
 Vai trò Admin đã được xác định ở mức Actor, nhưng quyền hạn cụ thể vẫn cần xác nhận, bao gồm:
 
@@ -140,7 +138,6 @@ Vai trò Admin đã được xác định ở mức Actor, nhưng quyền hạn 
 - Quyền tạo và quản lý Role.
 - Quyền phân quyền.
 - Quyền cấu hình hệ thống.
-- Quyền truy cập Reporting.
 
 ### 3.3. Staff
 
@@ -294,7 +291,6 @@ flowchart TB
         Category[Category Module - pending confirmation]
         Blog[Blog Module]
         User[User / Role Module - pending confirmation]
-        Report[Reporting Module - if approved]
 
         API --> Auth
         API --> Product
@@ -304,7 +300,6 @@ flowchart TB
         API --> Category
         API --> Blog
         API --> User
-        API --> Report
     end
 
     subgraph DATA[Data and External Services]
@@ -324,7 +319,6 @@ flowchart TB
     Category --> Prisma
     Blog --> Prisma
     User --> Prisma
-    Report --> Prisma
 
     Prisma --> DB
     ProductImage -->|Asset operations| Cloudinary
@@ -352,7 +346,6 @@ Admin / Staff Interface
 - Product Type / Category Management nếu được xác nhận.
 - Blog Management.
 - User / Role Management theo quyền được cấp.
-- Reporting nếu nằm trong phạm vi.
 
 SAD chưa xác định Home Page và Contact Information là nội dung tĩnh trên Frontend hay lấy từ API. Cần xác nhận trước khi quyết định cách tổ chức data fetching.
 
@@ -488,17 +481,6 @@ Các trách nhiệm dự kiến:
 - Quản lý Role và Permission sau khi mô hình được phê duyệt.
 - Kiểm tra quyền truy cập chức năng quản trị.
 Không được coi JWT là toàn bộ giải pháp bảo mật. Backend vẫn phải kiểm tra quyền trên từng API hoặc nhóm thao tác được bảo vệ.
-### 6.8. Reporting Module
-Mục đích: Cung cấp số liệu tổng hợp và báo cáo quản trị nếu chức năng Reporting được xác nhận nằm trong phạm vi.
-
-SAD đề cập Reporting nhưng cũng ghi nhận cần xác nhận phạm vi và yêu cầu cụ thể.
-
-Không nên triển khai module này như một yêu cầu bắt buộc trước khi chủ dự án xác nhận:
-- Chỉ số cần thống kê.
-- Khoảng thời gian thống kê.
-- Actor được xem báo cáo.
-- Nguồn dữ liệu.
-- Cách tính từng chỉ số.
 
 ## 7. System Request Flow
 
@@ -814,7 +796,6 @@ SAD có đề xuất các nhóm Admin API cho:
 - Product Price.
 - Category.
 - Blog.
-- Reporting.
 Tuy nhiên, SAD nêu rõ request/response chi tiết của Admin API chưa được hoàn thiện. Các endpoint quản trị cần được rà soát lại theo bảng API trong SAD và các Open Issues trước khi tạo API contract chính thức.
 
 | Nhóm API | Nghiệp vụ dự kiến | Vấn đề phụ thuộc |
@@ -825,7 +806,6 @@ Tuy nhiên, SAD nêu rõ request/response chi tiết của Admin API chưa đư�
 | Product Price | Quản lý giá sản phẩm | OI-008, OI-015, OI-016 |
 | Category | Quản lý danh mục | OI-009 |
 | Blog | Quản lý bài viết | OI-006, OI-024 |
-| Reporting | Xem báo cáo | OI-007 |
 
 ### 9.9. Hướng dẫn triển khai API
 Các nội dung sau là khuyến nghị kỹ thuật để triển khai, không phải yêu cầu nghiệp vụ mới trong SAD:
@@ -861,7 +841,6 @@ Bảng dưới đây là định hướng suy ra từ mô tả Actor trong SAD, 
 | Quản lý Product Type / Category | Không | Cần xác nhận | Cần xác nhận |
 | Quản lý Blog | Không | Theo quyền được cấp | Dự kiến |
 | Quản lý User / Role | Không | Chưa xác định | Dự kiến |
-| Xem Reporting | Không | Chưa xác định | Cần xác nhận phạm vi |
 
 ### 10.3. Các quyết định bảo mật cần xác nhận
 - Cấu trúc User entity.
@@ -981,8 +960,7 @@ an-jewelry/
 │   │   ├── product-images/
 │   │   ├── product-prices/
 │   │   ├── categories/                # Only after Category is approved
-│   │   ├── blog/
-│   │   └── reporting/                 # Only if approved
+│   │   └── blog/
 │   └── prisma/
 │       ├── schema.prisma
 │       ├── migrations/
@@ -1040,7 +1018,6 @@ Phụ lục D của SAD là danh sách Open Issues chính thức. Bảng dưới
 | OI-004 | Phân quyền Admin/Staff | Authentication, Authorization, Admin UI |
 | OI-005 | Phạm vi và thao tác Product Management | Product Module và Admin API |
 | OI-006 | Phạm vi Blog Management và quy tắc nội dung | Blog Module, publication workflow |
-| OI-007 | Reporting có thuộc phạm vi dự án hay không | Reporting Module và acceptance criteria |
 | OI-008 | Quan hệ Product và Price, mô hình giá | Database relationship, price query |
 | OI-009 | Category entity và quan hệ với Product | Category Module, Product filters, API |
 | OI-010 | Thông số riêng của sản phẩm, ví dụ thuộc tính nhẫn/đá | Product Detail data model và UI |
@@ -1079,7 +1056,6 @@ Phase 1 — Xác nhận nghiệp vụ
 - Xác nhận Blog Management và publication status.
 - Xác nhận Category và Product Type.
 - Xác nhận Product Price và Image model.
-- Xác nhận Reporting có thuộc phạm vi hay không.
 Phase 2 — Hoàn thiện Data Model
 - Giải quyết quan hệ product_detail và product_price.
 - Xác định price history hoặc current price.
@@ -1129,9 +1105,7 @@ Phase 7 — Xây dựng Content Management
 - Product Price Management.
 - Category Management nếu được duyệt.
 - Blog Management.
-Phase 8 — Reporting
-Chỉ triển khai khi Reporting được xác nhận trong phạm vi. Trước khi lập trình cần chốt chỉ số, công thức, thời gian thống kê, nguồn dữ liệu và quyền truy cập.
-Phase 9 — Testing và Release
+Phase 8 — Testing và Release
 - Unit Tests.
 - Integration Tests.
 - API Tests.
@@ -1171,7 +1145,6 @@ Bảng này dùng để theo dõi các quyết định đã có trong work tree 
 | ADR-006 | Image Storage | Cloudinary | Đề xuất, cần chốt |
 | ADR-007 | API Style | REST-style JSON API | Đề xuất |
 | ADR-008 | Repository structure | Một Next.js app ở thư mục gốc | Hiện tại; tách frontend/ và backend/ chưa được quyết định |
-| ADR-009 | Reporting scope | Chỉ triển khai nếu được xác nhận | Cần xác nhận |
 | ADR-010 | Category model | Tách khỏi Product Type nếu nghiệp vụ cần | Cần xác nhận |
 | ADR-011 | Styling | Tailwind CSS v4 qua `@tailwindcss/turbopack` | Đã cấu hình |
 | ADR-012 | Language | TypeScript 5, chế độ `strict` | Đã cấu hình |

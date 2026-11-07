@@ -1,5 +1,25 @@
 # AI Change Log
 
+## 2026-11-07 10:00:00 +07:00 — Remove reporting workflow from docs
+
+### User instruction
+
+> remove all of reporting workflow in docs/ folder
+> if change, add promt and output summarize to ai_logs.md with time stamp, put in beginning of file so user can review
+
+### Changes made
+
+- `docs/REQUIREMENTS.md`: removed MOD-09, FR-037/FR-038, UC-21, AC-037, API-A29/A30, BR-016, BC-05, OI-007 and all reporting permission/UI/data/traceability references. Updated totals: 28 FR, 6 modules, 15 BR, 16 UC, 48 AC, 25 OI, 31 APIs.
+- `docs/ARCHITECTURE.md`: removed the Reporting module, actor permissions, layer-diagram node, Admin API group, permission-matrix row, repository folder, OI-007, implementation phase and ADR-009. Preserved the remaining IDs and renumbered only the sequential implementation phase.
+- `docs/AI_LOGS.md`: removed a historical word-level reporting reference and added this entry at the top.
+- No source code changes.
+
+### Output summary
+
+The reporting workflow is gone from the active requirements and architecture documents. Remaining requirements, use cases, APIs, acceptance criteria, traceability rows and totals are internally consistent; no reporting feature, module, permission or endpoint remains documented in `docs/`.
+
+---
+
 ## 2026-11-06 11:41:47 +07:00 — Align ARCHITECTURE.md with current work tree
 
 ### User instruction
@@ -50,7 +70,7 @@ The contributing guide and README now match the current repository instead of th
 
 ## Changes made
 
-- Updated `REQUIREMENTS.md` to remove contact-submission requirements, use cases, validation/data rules, APIs, reporting, and related acceptance criteria. Preserved surviving identifiers rather than renumbering them.
+- Updated `REQUIREMENTS.md` to remove contact-submission requirements, use cases, validation/data rules, APIs, and related acceptance criteria. Preserved surviving identifiers rather than renumbering them.
 - Restricted the customer-facing contact requirement to the phone number and Facebook/Instagram links already present in the source materials. The official phone number and social URLs remain `[CONFIRMATION REQUIRED]`; no values or additional contact channels were invented.
 - Updated `ARCHITECTURE.md` to remove the contact-submission module, request flow, data entity, endpoints, administration workflow, security/privacy design, repository folders, and implementation phase.
 - Updated `README.md` to describe direct contact through the existing phone and social-link channels, with no contact form or submission flow.
